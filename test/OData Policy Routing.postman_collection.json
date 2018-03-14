@@ -1,0 +1,504 @@
+{
+	"info": {
+		"name": "OData Policy Routing",
+		"_postman_id": "823d5e41-d2e7-b8df-2a3a-e474fdc549a0",
+		"description": "All API-Requests for testing the routing policy for OData queries",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Airlines",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('Airlines(\\'TK\\')\",\"AirlineCode\":\"TK\",\"Name\":\"Turkish Airlines\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines('AA')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"AirlineCode\":\"AA\",\"Name\":\"American Airlines\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines('AA')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines('AA')"
+					]
+				},
+				"description": "Original request"
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines/$count",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"15\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines/$count",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines",
+						"$count"
+					]
+				},
+				"description": "Original request"
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines('AA')/Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('metadata#Airlines(\\'AA\\')/Name\",\"value\":\"American Airlines\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines('AA')/Name",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines('AA')",
+						"Name"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines('AA')/Name/$value",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body is correct\", function () {",
+							"    pm.response.to.have.body(\"American Airlines\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines('AA')/Name/$value",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines('AA')",
+						"Name",
+						"$value"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines?$filter=contains(Name, 'American Airlines')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('Airlines(\\'AA\\')\",\"AirlineCode\":\"AA\",\"Name\":\"American Airlines\"}');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines?$filter=contains(Name, 'American Airlines')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "contains(Name, 'American Airlines')",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/Airports('KSFO')/Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"value\":\"San Francisco International Airport\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports('KSFO')/Name",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports('KSFO')",
+						"Name"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/Airports('KSFO')/Location/Address",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"CA 94128\");",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"South McDonnell Road,\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports('KSFO')/Location/Address",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports('KSFO')",
+						"Location",
+						"Address"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/People?$filter=FirstName eq 'Scott'",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('FirstName\":\"Scott\",');",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"CountryRegion\":\"United States\",\"Name\":\"Albuquerque\",\"Region\":\"NM\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/People?$filter=FirstName eq 'Scott'",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"People"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "FirstName eq 'Scott'",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/Airports?$filter=contains(Location/Address, 'San Francisco')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('[-122.374722222222,37.6188888888889]');",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"name\":\"EPSG:4326\"');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports?$filter=contains(Location/Address, 'San Francisco')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "contains(Location/Address, 'San Francisco')",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/Airports?$select=Name, IcaoCode",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"San Francisco International Airport\",\"IcaoCode\":\"KSFO\"}');",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"Sydney Airport\",\"IcaoCode\":\"YSSY\"}]');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports?$select=Name, IcaoCode",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports"
+					],
+					"query": [
+						{
+							"key": "$select",
+							"value": "Name, IcaoCode",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/People('russellwhyte')?$expand=Trips($filter=Name eq 'Trip in US')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('\"Address\":\"187 Suffolk Ln.\",');",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include('We actually had a client meeting, but we also took one to go sightseeings');",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/People('russellwhyte')?$expand=Trips($filter=Name eq 'Trip in US')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"People('russellwhyte')"
+					],
+					"query": [
+						{
+							"key": "$expand",
+							"value": "Trips($filter=Name eq 'Trip in US')",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}

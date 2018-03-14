@@ -1,0 +1,172 @@
+<entityStoreData xmlns="http://www.vordel.com/2005/06/24/entityStore">
+<metaInfo flags="138">
+	<exportRoots>
+		<key type='CircuitContainer'>
+			<id field='name' value='API-Manager'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='OData routing'/>
+			</key>
+		</key>
+		<key type='ESConfiguration'>
+			<id field='name' value='Entity Store Configuration'/>
+		</key>
+	</exportRoots>
+	<typeVersions>
+		<type name="CircuitContainer" version="1"/>
+		<type name="ESConfiguration" version="21"/>
+		<type name="Entity" version="0"/>
+		<type name="Filter" version="5"/>
+		<type name="FilterCircuit" version="4"/>
+		<type name="JavaScriptFilter" version="3"/>
+		<type name="RootChild" version="0"/>
+	</typeVersions>
+	<realizedTypes><![CDATA[
+<entityStoreData>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" abstract="true" extends="Entity" name="RootChild"/>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="ESConfiguration">
+        <constant name="_version" type="integer" value="21"/>
+        <!--
+            Give this singleton a key.
+        -->
+        <field isKey="true" name="name" type="string"/>
+        <!-- 
+            We use this field to verify that the passphrase for the 
+            encryped data is synchronized between the server and client, and
+            between multiple invocations of the client
+        -->
+        <field name="passphraseTest" type="encrypted"/>
+        <field name="version" type="string"/>
+        <!-- The product key should never change for the lifetime of the product -->
+        <field name="productKey" type="string"/>
+        <field cardinality="?" name="gitrev" type="string"/>
+    </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="CircuitContainer">
+    <constant name="_version" type="integer" value="1"/>
+    <componentType cardinality="*" name="FilterCircuit"/>
+    <componentType cardinality="*" name="CircuitContainer"/>
+    <componentType cardinality="*" name="MVProperty"/>
+    <field isKey="true" name="name" type="string"/>
+  </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="RootChild" name="FilterCircuit">
+        <constant name="_version" type="integer" value="4"/>
+		<componentType cardinality="*" name="Filter"/>
+		<componentType cardinality="1" name="BoundCircuit"/>
+		<componentType cardinality="*" name="Property"/>
+		<field cardinality="1" name="start" type="@Filter"/>
+		<field cardinality="?" name="fault" type="@Filter"/>
+		<field isKey="true" name="name" type="string"/>
+		<field cardinality="1" default="3" name="logMask" type="integer"/>
+
+		<field cardinality="?" name="description" type="string"/>		
+		<field cardinality="1" name="category" type="@PolicyCategory">
+            <defaultRef>
+                <key type="PolicyCategoryGroup">
+                  <id field="name" value="Policy Categories"/>
+                  <key type="PolicyCategory">
+                      <id field="name" value="miscellaneous"/>
+                  </key>
+                </key>
+            </defaultRef>
+        </field>
+	</entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" abstract="true" extends="Entity" name="Filter">
+        <constant name="_version" type="integer" value="5"/>
+        <field cardinality="?" name="successNode" type="@Filter"/>
+        <field cardinality="?" name="failureNode" type="@Filter"/>
+        <field isKey="true" name="name" type="string"/>
+        <field cardinality="1" default="2" name="logMask" type="integer"/>
+        <field cardinality="1" default="Filter aborted due to exception" name="logFatal" type="string"/>
+        <field cardinality="1" default="Filter failed" name="logFailure" type="string"/>
+        <field cardinality="1" default="Filter passed" name="logSuccess" type="string"/>
+        <field cardinality="1" name="category" type="@Category">
+            <defaultRef>
+                <key type="CategoryGroup">
+                  <id field="name" value="Filter Categories"/>
+                  <key type="Category">
+                      <id field="name" value="miscellaneous"/>
+                  </key>
+                </key>
+            </defaultRef>
+        </field>
+      <field cardinality="1" default="0" name="abortProcessingOnLogError" type="boolean"/>
+      <field cardinality="1" default="SERVICE" name="logMaskType" type="string"/>
+      <field cardinality="*" name="classloader" type="^ClassLoader"/>
+    </entityType>
+<entityType xmlns="http://www.vordel.com/2005/06/24/entityStore" extends="Filter" name="JavaScriptFilter">
+        <constant name="_version" type="integer" value="3"/>
+	<constant name="class" type="string" value="com.vordel.circuit.script.ScriptFilter"/>
+	<field cardinality="1" default="function invoke(msg)         {            return true;         }" name="script" type="string"/>
+	<field cardinality="1" default="nashorn" name="engineName" type="string"/>
+        <field cardinality="*" name="requiredProperties" type="string"/>
+        <field cardinality="*" name="generatedProperties" type="string"/>
+        <field cardinality="*" name="consumedProperties" type="string"/>
+	</entityType>
+</entityStoreData>
+	]]></realizedTypes>
+</metaInfo>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="FilterCircuit">
+	<key type='CircuitContainer'>
+		<id field='name' value='API-Manager'/>
+	</key>
+	<fval name="category"><value contentType="reference">
+		<key type='PolicyCategoryGroup'>
+			<id field='name' value='Policy Categories'/>
+			<key type='PolicyCategory'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="description"><value></value></fval>
+	<fval name="logMask"><value>3</value></fval>
+	<fval name="name"><value>OData routing</value></fval>
+	<fval name="start"><value contentType="reference">
+		<key type='CircuitContainer'>
+			<id field='name' value='API-Manager'/>
+			<key type='FilterCircuit'>
+				<id field='name' value='OData routing'/>
+				<key type='JavaScriptFilter'>
+					<id field='name' value='Handle OData routing'/>
+				</key>
+			</key>
+		</key>
+	</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="JavaScriptFilter">
+	<key type='CircuitContainer'>
+		<id field='name' value='API-Manager'/>
+		<key type='FilterCircuit'>
+			<id field='name' value='OData routing'/>
+		</key>
+	</key>
+	<fval name="abortProcessingOnLogError"><value>0</value></fval>
+	<fval name="category"><value contentType="reference">
+		<key type='CategoryGroup'>
+			<id field='name' value='Filter Categories'/>
+			<key type='Category'>
+				<id field='name' value='miscellaneous'/>
+			</key>
+		</key>
+	</value></fval>
+	<fval name="consumedProperties"></fval>
+	<fval name="engineName"><value>js</value></fval>
+	<fval name="generatedProperties"></fval>
+	<fval name="logFailure"><value>Failed script filter</value></fval>
+	<fval name="logFatal"><value>Error while attempt to run script filter. Error: ${circuit.exception}</value></fval>
+	<fval name="logMask"><value>2</value></fval>
+	<fval name="logMaskType"><value>SERVICE</value></fval>
+	<fval name="logSuccess"><value>Passed script filter</value></fval>
+	<fval name="name"><value>Handle OData routing</value></fval>
+	<fval name="requiredProperties"></fval>
+	<fval name="script"><value>importPackage(Packages.com.vordel.trace);&#xD;&#xA;&#xD;&#xA;function invoke(msg) &#xD;&#xA;{&#xD;&#xA;&#x9;var httpRequestUri = String(msg.get(&quot;http.request.uri&quot;));&#xD;&#xA;&#x9;var httpRequestPath = msg.get(&quot;http.request.path&quot;);&#xD;&#xA;&#x9;var httpMethodPath = msg.get(&quot;api.method.path&quot;);&#xD;&#xA;&#x9;var destinationURL = msg.get(&quot;destinationURL&quot;);&#xD;&#xA;&#xD;&#xA;&#x9;Trace.info(&quot;OData routing....&quot;);&#xD;&#xA;&#x9;Trace.debug(&quot;httpRequestUri:&#x9;&#x9;&quot; + httpRequestUri);&#xD;&#xA;&#x9;Trace.debug(&quot;httpMethodPath:&#x9;&quot; + httpMethodPath);&#xD;&#xA;&#x9;Trace.debug(&quot;destinationURL:   &#x9;&quot; + destinationURL);&#xD;&#xA;&#xD;&#xA;&#x9;// Remove the wildcard * at the end&#xD;&#xA;&#x9;httpMethodPath=httpMethodPath.substring(0, httpMethodPath.length() - 1);&#xD;&#xA;&#x9;// Perhaps improve this, as the wildcard may oocur more than once&#xD;&#xA;&#x9;destinationURL = destinationURL.replace(&quot;*&quot;, &quot;&quot;);&#xD;&#xA;&#xD;&#xA;&#x9;// Extract the query parameters given and put them in a variable&#xD;&#xA;&#x9;if(httpRequestUri.indexOf(&apos;?&apos;)!=-1) {&#xD;&#xA;&#x9;&#x9;var queryString = httpRequestUri.substring(httpRequestUri.indexOf(&apos;?&apos;)+1)&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;// Reduce the method path about the ({....}) part&#xD;&#xA;&#x9;if( httpMethodPath.indexOf(&quot;(&quot;)!=-1) {&#xD;&#xA;&#x9;&#x9;httpMethodPath = httpMethodPath.substring(0, httpMethodPath.indexOf(&quot;(&quot;));&#xD;&#xA;&#x9;}&#xD;&#xA;&#x9;&#xD;&#xA;&#x9;// Extract the path from the incoming request, including the declared BE-Method&#xD;&#xA;&#x9;var queryPath = httpRequestPath.substring(httpRequestPath.indexOf(httpMethodPath));&#xD;&#xA;&#x9;// From the destinationURL we must remove everything after basePath&#xD;&#xA;&#x9;destinationURL = destinationURL.substring(0, destinationURL.indexOf(httpMethodPath));&#xD;&#xA;&#xD;&#xA;&#x9;Trace.debug(&quot;httpMethodPath:   &#x9;&quot; + httpMethodPath);&#xD;&#xA;&#x9;Trace.debug(&quot;queryPath:   &#x9;&quot; + queryPath);&#xD;&#xA;&#x9;Trace.debug(&quot;queryString:   &#x9;&quot; + queryString);&#xD;&#xA;&#x9;&#xD;&#xA;&#xD;&#xA;&#x9;//var requestUri = httpRequestUri.substring(httpRequestUri.indexOf(httpMethodPath)+httpMethodPath.length());&#xD;&#xA;&#x9;if(queryString!=null) {&#xD;&#xA;&#x9;&#x9;var destinationURL = destinationURL + queryPath + &quot;?&quot; + queryString;&#xD;&#xA;&#x9;} else {&#xD;&#xA;&#x9;&#x9;var destinationURL = destinationURL + queryPath;&#xD;&#xA;&#x9;}&#xD;&#xA;&#xD;&#xA;&#x9;Trace.debug(&quot;OData routing ...&quot;);&#xD;&#xA;&#x9;Trace.info(&quot;Generated destinationURL: &quot; + destinationURL);&#xD;&#xA;&#xD;&#xA;&#x9;msg.put(&quot;destinationURL&quot;, destinationURL);&#xD;&#xA;&#x9;return true;         &#xD;&#xA;}</value></fval>
+	<fval name="successNode"><value contentType="reference">-1</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="CircuitContainer">
+	<fval name="name"><value>API-Manager</value></fval>
+</entity>
+<entity xmlns="http://www.vordel.com/2005/06/24/entityStore"  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" type="ESConfiguration">
+	<fval name="name"><value>Entity Store Configuration</value></fval>
+	<fval name="passphraseTest"><value>aHR0cDsvL3d3dy52b3JkZWwuY29t</value></fval>
+	<fval name="productKey"><value>VordelGateway</value></fval>
+	<fval name="version"><value>7.5.3</value></fval>
+</entity>
+</entityStoreData>
