@@ -3,6 +3,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using System;
 using System.Linq;
 using System.Xml;
 using Microsoft.OData.Edm;
@@ -268,7 +269,15 @@ namespace OData2Swagger
                         .Description("Returns the entity with the key from " + entitySet.Name)
                         .Tags(entitySet.Name)
                         .Parameters((keyParameters.DeepClone() as JArray)
-                            .Parameter("$select", "query", "description", "string")
+                          
+                          
+                            .Parameter("$expand", "query", "Expand navigation property", "string")
+                            .Parameter("$select", "query", "select structural property", "string")
+                            .Parameter("$orderby", "query", "order by some property", "string")
+                            .Parameter("$top", "query", "top elements", "integer")
+                            .Parameter("$skip", "query", "skip elements", "integer")
+                            .Parameter("$count", "query", "inlcude count in response", "boolean")
+                        
                         )
                         .Responses(new JObject()
                             .Response("200", "EntitySet " + entitySet.Name, entitySet.EntityType())
@@ -538,6 +547,7 @@ namespace OData2Swagger
 
         static void Main(string[] args)
         {
+
             IEdmModel model;
             IEnumerable<EdmError> errors;
             EdmxReader.TryParse(XmlReader.Create(metadataURI), out model, out errors);
@@ -571,15 +581,7 @@ namespace OData2Swagger
                 swaggerPaths.Add(GetPathForEntity(entitySet)+"*", CreateSwaggerPathForEntity(entitySet));
             }
 
-            /**
-             * Rathna change start*/
-           /** foreach (var entitySet in model.EntityContainer.EntitySets())
-            {
-                swaggerPaths.Add("/" + entitySet.Name + "/*", CreateSwaggerPathForEntitySet(entitySet));
-               
-            }
-            /**
-             * Rathna change end*/
+            
 
 
             foreach (var operationImport in model.EntityContainer.OperationImports())
