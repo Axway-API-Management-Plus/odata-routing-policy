@@ -19,6 +19,9 @@ This artefact was successfully tested for the following versions:
 • Use the Converter to generate a Swagger 2.0 API-Sepcification
 • Import the Policy: "OData routing" into you API-Manager configuration group
 • Make this policy part of your API-Manager routing policy (e.g. as a Policy-Shortcut)
+```
+![Routing Policy](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/OData-Policy-Linked-to-Routing.png)
+```
 • Configure your routing policy in API-Manager for your OData-Frontend API
 ```
 
@@ -26,9 +29,13 @@ This artefact was successfully tested for the following versions:
 
 ```
 • To enable this specific routing for your APIs, make sure you select the configured routing policy
+```
+![API-Manager Routing Policy](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/api-routing-policy-incl-odata.png)
+```
 • Configured API-Methods must end with * (example: ..../Airports* without any slash)
   (done by the Converter in that way)
-```
+ ```
+![API-Manager OData API](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/odata-api-in-apimgr.png)
 
 ## Bug and Caveats
 
