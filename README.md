@@ -26,7 +26,8 @@ This artefact was successfully tested for the following versions:
 
 ```
 • To enable this specific routing for your APIs, make sure you select the configured routing policy
-• Configured API-Methods must end with * (example: ..../Airports* without any slash) (done by the Converter in that way)
+• Configured API-Methods must end with * (example: ..../Airports* without any slash)
+  (done by the Converter in that way)
 ```
 
 ## Bug and Caveats
