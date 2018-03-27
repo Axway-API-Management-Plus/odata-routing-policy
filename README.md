@@ -1,5 +1,5 @@
 # Description
-This project basically provides you:
+This project provides:
 - A converter to generate a Swagger 2.0 definition based on a OData-Meta-Definition
 - A policy which makes it possible to route OData specific queries through the API-Manager. 
 
