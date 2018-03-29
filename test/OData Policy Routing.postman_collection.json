@@ -477,7 +477,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/People('russellwhyte')?$expand=Trips($filter=Name eq 'Trip in US')",
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/People('russellwhyte')?$expand=Trips(%24filter%3DName%20eq%20%27Trip%20in%20US%27)",
 					"protocol": "https",
 					"host": [
 						"{{api-gw-host}}"
@@ -491,7 +491,7 @@
 					"query": [
 						{
 							"key": "$expand",
-							"value": "Trips($filter=Name eq 'Trip in US')",
+							"value": "Trips(%24filter%3DName%20eq%20%27Trip%20in%20US%27)",
 							"equals": true
 						}
 					]
