@@ -10,6 +10,8 @@ using Microsoft.OData.Edm;
 using Microsoft.OData.Edm.Csdl;
 using Microsoft.OData.Edm.Validation;
 using Newtonsoft.Json.Linq;
+using System.Net;
+using Newtonsoft.Json;
 
 namespace OData2Swagger
 {
@@ -205,15 +207,16 @@ namespace OData2Swagger
 
     class Program
     {
-        private const string metadataURI = " http://services.odata.org/V4/TripPinServiceRW/$metadata";
-        private const string host = "services.odata.org";
-        private const string version = "0.1.0";
-        private const string basePath = "/V4/(S(cnbm44wtbc1v5bgrlek5lpcc))/TripPinServiceRW";
-        private const string outputFile = @"trippin.json";
+        //private const string metadataURI = "http://services.odata.org/V4/TripPinServiceRW/$metadata";
+       // private const string host = "services.odata.org";
+        //private const string version = "0.1.0";
+        //private const string basePath = "/V4/(S(cnbm44wtbc1v5bgrlek5lpcc))/TripPinServiceRW";
+        private const string outputFile = @"swagger.json";
 
         static JObject CreateSwaggerPathForEntitySet(IEdmEntitySet entitySet)
         {
             return new JObject()
+
             {
                 {
                     "get", new JObject()
@@ -545,8 +548,37 @@ namespace OData2Swagger
             };
         }
 
+        public static string Get(string uri)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+
         static void Main(string[] args)
         {
+
+            string output = Get(args[0]);
+            Console.WriteLine(output);
+            var results = JsonConvert.DeserializeObject<dynamic>(output);
+            var metadataURI = results["@odata.context"].Value;
+           
+            var url = new Uri(metadataURI);
+            var host = url.Host;
+            var version = "1.0.0";
+            var basePath = url.AbsolutePath;
+            basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
+
+
+            Console.WriteLine(basePath);
+
+
 
             IEdmModel model;
             IEnumerable<EdmError> errors;
