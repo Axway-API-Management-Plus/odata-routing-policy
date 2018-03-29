@@ -9,6 +9,8 @@ D:\odata-routing-policy\converter\bin\Debug>OData2Swagger.exe http://services.od
 
 ```
 The converter generate a file named swagger.json under D:\odata-routing-policy\converter\bin\Debug folder
+
+
 Once imported and virtualized as a Frontend-API you need make the Policy provided in this project a routing policy, as it takes care about proper routing all different OData-Requests.
 
 To 
