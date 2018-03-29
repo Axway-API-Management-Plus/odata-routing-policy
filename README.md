@@ -39,10 +39,17 @@ This artefact was successfully tested for the following versions:
 
 ## Bug and Caveats
 
+When using nested query parameters like in this example:
 ```
-No known bugs or caveats. 
-Test-Suite test all possible variations. If you contribute, make sure the test-suite still runs okay.
+/People?$expand=Trips($filter=Name eq 'Trip in US')
 ```
+the nested parameter must be URL-Encoded due to the fact, how the API-Manager 
+parses the Query-Parameters based on the equal ("=") sign:
+```
+/People?$expand=Trips(%24filter%3DName%20eq%20%27Trip%20in%20US%27)
+```
+Besides that, the Postman-Test-Suite passes including many differant query variations. 
+If you contribute, make sure the test-suite still runs okay.
 
 ## Contributing
 
