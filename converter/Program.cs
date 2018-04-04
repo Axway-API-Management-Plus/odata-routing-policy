@@ -211,7 +211,7 @@ namespace OData2Swagger
        // private const string host = "services.odata.org";
         //private const string version = "0.1.0";
         //private const string basePath = "/V4/(S(cnbm44wtbc1v5bgrlek5lpcc))/TripPinServiceRW";
-        private const string outputFile = @"swagger.json";
+      //  private const string outputFile = @"swagger.json";
 
         static JObject CreateSwaggerPathForEntitySet(IEdmEntitySet entitySet)
         {
@@ -563,9 +563,17 @@ namespace OData2Swagger
 
         static void Main(string[] args)
         {
+            if(args.Length != 2)
+            {
+                Console.WriteLine("Invalid command line arguments");
+                Console.WriteLine("Example : OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW trip.json");
+                return;
+            }
+
 
             string output = Get(args[0]);
-            Console.WriteLine(output);
+            string outputFile = args[1];
+            //Console.WriteLine(output);
             var results = JsonConvert.DeserializeObject<dynamic>(output);
             var metadataURI = results["@odata.context"].Value;
            
@@ -576,7 +584,7 @@ namespace OData2Swagger
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
 
 
-            Console.WriteLine(basePath);
+            //Console.WriteLine(basePath);
 
 
 
