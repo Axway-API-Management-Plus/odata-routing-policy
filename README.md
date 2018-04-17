@@ -3,9 +3,9 @@ This project provides:
 - A converter to generate a Swagger 2.0 definition based on a OData-Meta-Definition
 - A policy which makes it possible to route OData specific queries through the API-Manager. 
 
-The converter takes in an OData URL (such as http://services.odata.org/V4/TripPinServiceRW) from URL and converts it into a Swagger 2.0 API-Specification, which can imported into the Axway API-Manager.
+The converter takes in an OData URL (such as http://services.odata.org/V4/TripPinServiceRW) and output file to convert the odata specfication to a Swagger 2.0 API-Specification, which can imported into the Axway API-Manager.
 ```bash
-D:\odata-routing-policy\converter\bin\Release>OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW
+D:\odata-routing-policy\converter\bin\Release>OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW trip.json
 
 ```
 The converter generate a file named swagger.json under D:\odata-routing-policy\converter\bin\Debug folder
