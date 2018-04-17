@@ -4,6 +4,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Text;
 using System.Linq;
 using System.Xml;
 using Microsoft.OData.Edm;
@@ -548,9 +549,19 @@ namespace OData2Swagger
             };
         }
 
-        public static string Get(string uri)
+        public static string Get(string uri, String username, String password)
         {
+
+           
+
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            if (username != null && password != null)
+            {
+               
+                string credential = username + ":" + password;
+                string authHeader = Convert.ToBase64String(Encoding.Default.GetBytes(credential));
+                request.Headers["Authorization"] = "Basic " + authHeader;
+            }
             request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
@@ -563,15 +574,25 @@ namespace OData2Swagger
 
         static void Main(string[] args)
         {
-            if(args.Length != 2)
+            string username = null;
+            string password = null;
+         
+            if (args.Length < 2)
             {
                 Console.WriteLine("Invalid command line arguments");
                 Console.WriteLine("Example : OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW trip.json");
                 return;
             }
+          
+            if(args.Length == 4)
+            {
+                username = args[2];
+                password = args[3];
+            }
 
+        
 
-            string output = Get(args[0]);
+            string output = Get(args[0], username,password);
             string outputFile = args[1];
             //Console.WriteLine(output);
             var results = JsonConvert.DeserializeObject<dynamic>(output);
@@ -584,13 +605,29 @@ namespace OData2Swagger
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
 
 
-            //Console.WriteLine(basePath);
+            XmlReader reader = null;
+
+            if (username != null && password != null) {
+               
+                XmlUrlResolver resolver = new XmlUrlResolver();
+                resolver.Credentials = new NetworkCredential(username, password);
+
+                XmlReaderSettings settings = new XmlReaderSettings();
+                settings.XmlResolver = resolver;
+                reader = XmlReader.Create(metadataURI, settings);
+            }
+            else
+            {
+                reader = XmlReader.Create(metadataURI);
+            }
+
+
 
 
 
             IEdmModel model;
             IEnumerable<EdmError> errors;
-            EdmxReader.TryParse(XmlReader.Create(metadataURI), out model, out errors);
+            EdmxReader.TryParse(reader, out model, out errors);
 
             JObject swaggerDoc = new JObject()
             {
