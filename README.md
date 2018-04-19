@@ -3,12 +3,14 @@ This project provides:
 - A converter to generate a Swagger 2.0 definition based on a OData-Meta-Definition
 - A policy which makes it possible to route OData specific queries through the API-Manager. 
 
-The converter takes in an OData URL (such as http://services.odata.org/V4/TripPinServiceRW) and output file to convert the odata specfication to a Swagger 2.0 API-Specification, which can imported into the Axway API-Manager.
+The converter takes in an OData URL (such as http://services.odata.org/V4/TripPinServiceRW) and the name of the output file to convert the odata specfication to a Swagger 2.0 API-Specification, which can imported into the Axway API-Manager.
+Usage:
 ```bash
-D:\odata-routing-policy\converter\bin\Release>OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW trip.json
+D:\odata-routing-policy\converter\bin\Release>OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW name_of_swagger_file.json [http-basic-username] [http-basic-password]
 
 ```
-The converter generate a file named swagger.json under D:\odata-routing-policy\converter\bin\Debug folder
+The converter generates a Swagger-File using the given name in the current folder.
+Please note, that providing username/password is optional.
 
 
 Once imported and virtualized as a Frontend-API you need make the Policy provided in this project a routing policy, as it takes care about proper routing all different OData-Requests.
@@ -30,6 +32,8 @@ This artefact was successfully tested for the following versions:
 ![Routing Policy](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/OData-Policy-Linked-to-Routing.png)
 ```
 • Configure your routing policy in API-Manager for your OData-Frontend API
+• Important note: When not using the provided Routing-Policy from this project: 
+     Verify, in the "Connect to URL" filter that the URL-Parameter is configured to ${destinationURL}
 ```
 
 ## Usage
