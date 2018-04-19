@@ -32,6 +32,8 @@ This artefact was successfully tested for the following versions:
 ![Routing Policy](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/OData-Policy-Linked-to-Routing.png)
 ```
 • Configure your routing policy in API-Manager for your OData-Frontend API
+• Important note: When not using the provided Routing-Policy from this project: 
+     Verify, in the "Connect to URL" filter that the URL-Parameter is configured to ${destinationURL}
 ```
 
 ## Usage
