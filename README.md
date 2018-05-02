@@ -47,6 +47,10 @@ This artefact was successfully tested for the following versions:
   (done by the Converter in that way)
  ```
 ![API-Manager OData API](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/odata-api-in-apimgr.png)
+```
+• And correct the FE-API Path by removing this part (S(bwlyi5zyfdifrulnwfpj2f4u)): 
+```
+![API-Manager OData FE_API](https://github.com/Axway-API-Management-Plus/odata-routing-policy/blob/master/images/odata-api-in-apimgr-fe-api.png)
 
 ## Bug and Caveats
 
