@@ -313,6 +313,48 @@
 			"response": []
 		},
 		{
+			"name": "/Airports('KSFO')/Location/Address copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"CA 94128\");",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"South McDonnell Road,\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports('KSFO')/Location/Address",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports('KSFO')",
+						"Location",
+						"Address"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
 			"name": "/People?$filter=FirstName eq 'Scott'",
 			"event": [
 				{
@@ -494,6 +536,69 @@
 							"value": "Trips(%24filter%3DName%20eq%20%27Trip%20in%20US%27)",
 							"equals": true
 						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Airlines*",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airlines*",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airlines*"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/Airports('KSFO')*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"CA 94128\");",
+							"});",
+							"",
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"South McDonnell Road,\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports('KSFO')*",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V4",
+						"TripPinServiceRW",
+						"Airports('KSFO')*"
 					]
 				},
 				"description": ""
