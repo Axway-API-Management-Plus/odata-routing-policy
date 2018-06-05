@@ -13,7 +13,6 @@ namespace OdataSwaggerConverter
         public static JObject Responses(this JObject jObject, JObject responses)
         {
             jObject.Add("responses", responses);
-
             return jObject;
         }
 
@@ -221,7 +220,7 @@ namespace OdataSwaggerConverter
             if (args.Length < 2)
             {
                 Console.WriteLine("Invalid command line arguments");
-                Console.WriteLine("Example : OData2Swagger.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata northwind.json");
+                Console.WriteLine("Example : OdataSwaggerConverter.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata northwind.json");
                 return;
             }
 
