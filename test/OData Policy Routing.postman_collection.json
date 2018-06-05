@@ -313,48 +313,6 @@
 			"response": []
 		},
 		{
-			"name": "/Airports('KSFO')/Location/Address copy",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"CA 94128\");",
-							"});",
-							"",
-							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"South McDonnell Road,\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"body": {},
-				"url": {
-					"raw": "https://{{api-gw-host}}:8065/V4/TripPinServiceRW/Airports('KSFO')/Location/Address",
-					"protocol": "https",
-					"host": [
-						"{{api-gw-host}}"
-					],
-					"port": "8065",
-					"path": [
-						"V4",
-						"TripPinServiceRW",
-						"Airports('KSFO')",
-						"Location",
-						"Address"
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
 			"name": "/People?$filter=FirstName eq 'Scott'",
 			"event": [
 				{
@@ -599,6 +557,101 @@
 						"V4",
 						"TripPinServiceRW",
 						"Airports('KSFO')*"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/Northwind/Category_Sales_for_1997('Beverages')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"102074.3100\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Category_Sales_for_1997('Beverages')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"Northwind",
+						"Category_Sales_for_1997('Beverages')"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/Northwind/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"102074.3100\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"Northwind",
+						"Current_Product_Lists(ProductID=1,ProductName='Chai')*"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/Northwind/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"Northwind",
+						"Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')"
 					]
 				},
 				"description": ""
