@@ -502,6 +502,23 @@
 		},
 		{
 			"name": "Airlines*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Check for Shanghai Airline\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Shanghai Airline\");",
+							"});",
+							"",
+							"pm.test(\"Check for Turkish Airlines\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Turkish Airlines\");",
+							"});"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -751,6 +768,335 @@
 						"Northwind",
 						"Northwind.svc",
 						"Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/(S(readwrite))/OData/OData.svc/Advertisements?$top=20",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<d:Name>Early morning start, need coffee</d:Name>\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/(S(readwrite))/OData/OData.svc/Advertisements?$top=20",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Advertisements"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "20",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/(S(readwrite))/OData/OData.svc/Products(1)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<summary type=\\\"text\\\">Low fat milk</summary>\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/(S(readwrite))/OData/OData.svc/Products(1)",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Products(1)"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/(S(readwrite))/OData/OData.svc/Persons?$top=10&$orderby=Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Art Braunschweiger\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/(S(readwrite))/OData/OData.svc/Persons?$top=10&$orderby=Name",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Persons"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "10",
+							"equals": true
+						},
+						{
+							"key": "$orderby",
+							"value": "Name",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/(S(readwrite))/OData/OData.svc/Persons?$top=10&$orderby=Name&$select=Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Art Braunschweiger\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/(S(readwrite))/OData/OData.svc/Persons?$top=10&$orderby=Name&$select=Name",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Persons"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "10",
+							"equals": true
+						},
+						{
+							"key": "$orderby",
+							"value": "Name",
+							"equals": true
+						},
+						{
+							"key": "$select",
+							"value": "Name",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V2/(S(readwrite))/OData/OData.svc/Products?$top=10",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Low fat milk\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V2/(S(readwrite))/OData/OData.svc/Products?$top=10",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V2",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Products"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "10",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V2/(S(readwrite))/OData/OData.svc/Products?$top=20&$expand=Supplier,Category",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Search for category food\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Food\");",
+							"});",
+							"",
+							"pm.test(\"Search for supplier Tokyo Traders\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Tokyo Traders\");",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V2/(S(readwrite))/OData/OData.svc/Products?$top=20&$expand=Supplier,Category",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V2",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Products"
+					],
+					"query": [
+						{
+							"key": "$top",
+							"value": "20",
+							"equals": true
+						},
+						{
+							"key": "$expand",
+							"value": "Supplier,Category",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V2/(S(readwrite))/OData/OData.svc/Products(4)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Search for Fruit Punch\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"Fruit Punch\");",
+							"});",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V2/(S(readwrite))/OData/OData.svc/Products(4)",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V2",
+						"(S(readwrite))",
+						"OData",
+						"OData.svc",
+						"Products(4)"
 					]
 				},
 				"description": ""
