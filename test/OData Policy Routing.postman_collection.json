@@ -564,7 +564,7 @@
 			"response": []
 		},
 		{
-			"name": "/V3/Northwind/Category_Sales_for_1997('Beverages')",
+			"name": "/V3Category_Sales_for_1997('Beverages')",
 			"event": [
 				{
 					"listen": "test",
@@ -583,7 +583,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Category_Sales_for_1997('Beverages')",
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Northwind.svc/Category_Sales_for_1997('Beverages')",
 					"protocol": "https",
 					"host": [
 						"{{api-gw-host}}"
@@ -592,6 +592,7 @@
 					"path": [
 						"V3",
 						"Northwind",
+						"Northwind.svc",
 						"Category_Sales_for_1997('Beverages')"
 					]
 				},
@@ -600,7 +601,7 @@
 			"response": []
 		},
 		{
-			"name": "/V3/Northwind/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+			"name": "/V3/Customers('ALFKI')/Orders",
 			"event": [
 				{
 					"listen": "test",
@@ -608,7 +609,7 @@
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Body matches string\", function () {",
-							"    pm.expect(pm.response.text()).to.include(\"102074.3100\");",
+							"    pm.expect(pm.response.text()).to.include(\"<d:OrderID m:type=\\\"Edm.Int32\\\">10692</d:OrderID>\");",
 							"});"
 						]
 					}
@@ -619,7 +620,7 @@
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Northwind.svc/Customers('ALFKI')/Orders",
 					"protocol": "https",
 					"host": [
 						"{{api-gw-host}}"
@@ -628,6 +629,90 @@
 					"path": [
 						"V3",
 						"Northwind",
+						"Northwind.svc",
+						"Customers('ALFKI')",
+						"Orders"
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/Customers('ALFKI')/Orders?$filter=OrderID eq 10643",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<d:OrderID m:type=\\\"Edm.Int32\\\">10643</d:OrderID>\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Northwind.svc/Customers('ALFKI')/Orders?$filter=OrderID eq 10643",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"Northwind",
+						"Northwind.svc",
+						"Customers('ALFKI')",
+						"Orders"
+					],
+					"query": [
+						{
+							"key": "$filter",
+							"value": "OrderID eq 10643",
+							"equals": true
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "/V3/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<d:ProductName>Chai</d:ProductName>\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"url": {
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Northwind.svc/Current_Product_Lists(ProductID=1,ProductName='Chai')*",
+					"protocol": "https",
+					"host": [
+						"{{api-gw-host}}"
+					],
+					"port": "8065",
+					"path": [
+						"V3",
+						"Northwind",
+						"Northwind.svc",
 						"Current_Product_Lists(ProductID=1,ProductName='Chai')*"
 					]
 				},
@@ -636,13 +721,26 @@
 			"response": []
 		},
 		{
-			"name": "/V3/Northwind/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
+			"name": "/V3/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Body matches string\", function () {",
+							"    pm.expect(pm.response.text()).to.include(\"<d:QuantityPerUnit>10 boxes x 20 bags</d:QuantityPerUnit>\");",
+							"});"
+						]
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
 				"body": {},
 				"url": {
-					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
+					"raw": "https://{{api-gw-host}}:8065/V3/Northwind/Northwind.svc/Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')",
 					"protocol": "https",
 					"host": [
 						"{{api-gw-host}}"
@@ -651,6 +749,7 @@
 					"path": [
 						"V3",
 						"Northwind",
+						"Northwind.svc",
 						"Alphabetical_list_of_products(CategoryName='Beverages',Discontinued=false,ProductID=1,ProductName='Chai')"
 					]
 				},
