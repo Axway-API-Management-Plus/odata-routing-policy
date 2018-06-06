@@ -307,9 +307,9 @@ namespace OdataSwaggerConverter
                 foreach (var entity in entitySet.FunctionImports())
                 {
                     swaggerPaths.Add(GetPathForOperationImport(entity) + "*", CreateSwaggerPathForOperationImport(entity));
-                   
+                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForOperationImport(entity));
 
-                   // Console.WriteLine(entity);
+                    // Console.WriteLine(entity);
                 }
             }
 
