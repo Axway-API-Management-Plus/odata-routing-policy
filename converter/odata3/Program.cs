@@ -367,7 +367,12 @@ namespace OdataSwaggerConverter
            
             if (edmType.TypeKind == EdmTypeKind.Complex || edmType.TypeKind == EdmTypeKind.Entity)
             {
-                jObject.Add("$ref", "#/definitions/" + edmType.ToString());
+                //jObject.Add("$ref", "#/definitions/" + edmType.ToString());
+               
+                jObject.Add("type", "string");
+
+
+
             }
             else if (edmType.TypeKind == EdmTypeKind.Primitive)
             {
