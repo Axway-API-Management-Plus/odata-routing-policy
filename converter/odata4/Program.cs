@@ -600,7 +600,29 @@ namespace OData2Swagger
            
             var url = new Uri(metadataURI);
             var host = url.Host;
+            int port = url.Port;
+
+            bool portAppend = false;
+
+            if (port == 80)
+            {
+                portAppend = false;
+            }
+            else if (port == 443)
+            {
+                portAppend = false;
+            }
+            else
+            {
+                portAppend = true;
+            }
+
+            if (portAppend)
+            {
+                host = host + ":" + port;
+            }
             var version = "1.0.0";
+            var protocol = url.Scheme;
             var basePath = url.AbsolutePath;
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
 
@@ -640,7 +662,7 @@ namespace OData2Swagger
                     {"x-odata-version", "4.0"}
                 }},
                 {"host", host},
-                {"schemes", new JArray("http")},
+                {"schemes", new JArray(protocol)},
                 {"basePath", basePath},
                 {"consumes", new JArray("application/json")},
                 {"produces", new JArray("application/json")},

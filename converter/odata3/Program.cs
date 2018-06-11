@@ -256,6 +256,26 @@ namespace OdataSwaggerConverter
             
             var url = new Uri(metadataURI);
             var host = url.Host;
+            int port = url.Port;
+           
+            bool portAppend = false;
+
+            if(port == 80  )
+            {
+                portAppend = false;
+            }else if(port == 443)
+            {
+                portAppend = false;
+            }
+            else
+            {
+                portAppend = true;
+            }
+
+            if (portAppend)
+            {
+                host = host + ":" + port;
+            }
             var version = "1.0.0";
             var protocol = url.Scheme;
             
