@@ -229,7 +229,7 @@ namespace OdataSwaggerConverter
             {
                 username = args[2];
                 password = args[3];
-            }else if(args.Length == 5)
+            }else if(args.Length == 5 || args.Length == 3)
             {
                 string samlFlag = args[4];
                 if (samlFlag.Equals("saml2=disabled"))
