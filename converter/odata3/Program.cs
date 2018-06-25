@@ -213,6 +213,7 @@ namespace OdataSwaggerConverter
         static void Main(string[] args)
 
         {
+            bool disableSAML = false;
 
             string username = null;
             string password = null;
@@ -228,6 +229,13 @@ namespace OdataSwaggerConverter
             {
                 username = args[2];
                 password = args[3];
+            }else if(args.Length == 5)
+            {
+                string samlFlag = args[4];
+                if (samlFlag.Equals("saml2=disabled"))
+                {
+                    disableSAML = true;
+                }
             }
 
 
@@ -315,8 +323,22 @@ namespace OdataSwaggerConverter
                 foreach (var entity in entitySet.EntitySets())
                 {
 
-                    swaggerPaths.Add(GetPathForEntity(entity) + "*", CreateSwaggerPathForEntity(entity));
-                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForEntitySet(entity));
+                    if (!disableSAML) {
+                        swaggerPaths.Add(GetPathForEntity(entity) + "*", CreateSwaggerPathForEntity(entity));
+                    }
+                    else
+                    {
+                        swaggerPaths.Add(GetPathForEntity(entity) + "*", CreateSwaggerPathForEntitySAML(entity));
+                    }
+
+                    if (!disableSAML)
+                    {
+                        swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForEntitySet(entity));
+                    }
+                    else
+                    {
+                        swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForEntitySetSAML(entity));
+                    }
 
                 }
 
@@ -326,8 +348,8 @@ namespace OdataSwaggerConverter
             {
                 foreach (var entity in entitySet.FunctionImports())
                 {
-                    swaggerPaths.Add(GetPathForOperationImport(entity) + "*", CreateSwaggerPathForOperationImport(entity));
-                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForOperationImport(entity));
+                    swaggerPaths.Add(GetPathForOperationImport(entity) + "*", CreateSwaggerPathForOperationImport(entity,disableSAML));
+                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForOperationImport(entity,disableSAML));
 
                     // Console.WriteLine(entity);
                 }
@@ -538,6 +560,96 @@ namespace OdataSwaggerConverter
             };
         }
 
+
+        static JObject CreateSwaggerPathForEntitySetSAML(IEdmEntitySet entitySet)
+
+        {
+            var keyParameters = new JArray();
+            return new JObject()
+
+            {
+                {
+                    "get", new JObject()
+                        .Summary("Get EntitySet " + entitySet.Name)
+                        .Description("Returns the EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters(new JArray()
+                            .Parameter("$expand", "query", "Expand navigation property", "string")
+                            .Parameter("$select", "query", "select structural property", "string")
+                            .Parameter("$orderby", "query", "order by some property", "string")
+                            .Parameter("$top", "query", "top elements", "integer")
+                            .Parameter("$skip", "query", "skip elements", "integer")
+                             .Parameter("$inlinecount", "query", "inlcude count in response", "string")
+                            .Parameter("$format", "query", "response format", "string")
+                            .Parameter("$links", "query", "response format", "string")
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "post", new JObject()
+                        .Summary("Post a new entity to EntitySet " + entitySet.Name)
+                        .Description("Post a new entity to EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters(new JArray()
+                            .Parameter(entitySet.ElementType.Name, "body", "The entity to post",
+                                entitySet.ElementType)
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("201", "EntitySet " + entitySet.Name, entitySet.ElementType)
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "patch", new JObject()
+                        .Summary("Update entity in EntitySet " + entitySet.Name)
+                        .Description("Update entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter(entitySet.ElementType.Name, "body", "The entity to patch",
+                                entitySet.ElementType)
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("204", "Empty response")
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "delete", new JObject()
+                        .Summary("Delete entity in EntitySet " + entitySet.Name)
+                        .Description("Delete entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter("If-Match", "header", "If-Match header", "string")
+                             .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("204", "Empty response")
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "put", new JObject()
+                        .Summary("Delete entity in EntitySet " + entitySet.Name)
+                        .Description("Delete entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter("If-Match", "header", "If-Match header", "string")
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
+                            .DefaultErrorResponse()
+                        )
+                }
+            };
+        }
+
         static JObject CreateSwaggerPathForEntity(IEdmEntitySet entitySet)
         {
             var keyParameters = new JArray();
@@ -567,6 +679,8 @@ namespace OdataSwaggerConverter
                             .Parameter("$inlinecount", "query", "inlcude count in response", "string")
                             .Parameter("$format", "query", "response format", "string")
                             .Parameter("$links", "query", "response format", "string")
+                            
+
 
                         )
                         .Responses(new JObject()
@@ -616,7 +730,92 @@ namespace OdataSwaggerConverter
             };
         }
 
-       
+
+        static JObject CreateSwaggerPathForEntitySAML(IEdmEntitySet entitySet)
+        {
+            var keyParameters = new JArray();
+            foreach (var key in entitySet.ElementType.Key())
+            {
+                string format;
+                string type = GetPrimitiveTypeAndFormat(key.Type.Definition as IEdmPrimitiveType, out format);
+                bool required = !key.Type.IsNullable;
+                keyParameters.Parameter(key.Name, "path", "key: " + key.Name, type, format, required);
+            }
+
+            return new JObject()
+            {
+                {
+                    "get", new JObject()
+                        .Summary("Get entity from " + entitySet.Name + " by key.")
+                        .Description("Returns the entity with the key from " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+
+
+                            .Parameter("$expand", "query", "Expand navigation property", "string")
+                            .Parameter("$select", "query", "select structural property", "string")
+                            .Parameter("$orderby", "query", "order by some property", "string")
+                            .Parameter("$top", "query", "top elements", "integer")
+                            .Parameter("$skip", "query", "skip elements", "integer")
+                            .Parameter("$inlinecount", "query", "inlcude count in response", "string")
+                            .Parameter("$format", "query", "response format", "string")
+                            .Parameter("$links", "query", "response format", "string")
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                          
+
+
+                        )
+                        .Responses(new JObject()
+                            .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "patch", new JObject()
+                        .Summary("Update entity in EntitySet " + entitySet.Name)
+                        .Description("Update entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter(entitySet.ElementType.Name, "body", "The entity to patch",
+                                entitySet.ElementType)
+                             .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("204", "Empty response")
+                            .DefaultErrorResponse()
+                        )
+                },
+                {
+                    "delete", new JObject()
+                        .Summary("Delete entity in EntitySet " + entitySet.Name)
+                        .Description("Delete entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter("If-Match", "header", "If-Match header", "string")
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("204", "Empty response")
+                            .DefaultErrorResponse()
+                        )
+                },{
+                    "put", new JObject()
+                        .Summary("Delete entity in EntitySet " + entitySet.Name)
+                        .Description("Delete entity in EntitySet " + entitySet.Name)
+                        .Tags(entitySet.Name)
+                        .Parameters((keyParameters.DeepClone() as JArray)
+                            .Parameter("If-Match", "header", "If-Match header", "string")
+                            .Parameter("saml2", "query", "Disable SAML SSO", "string")
+                        )
+                        .Responses(new JObject()
+                            .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
+                            .DefaultErrorResponse()
+                        )
+                }
+            };
+        }
+
+
 
         static string GetPathForEntity(IEdmEntitySet entitySet)
         {
@@ -641,13 +840,18 @@ namespace OdataSwaggerConverter
             return singleEntityPath;
         }
 
-        static JObject CreateSwaggerPathForOperationImport(IEdmFunctionImport operationImport)
+        static JObject CreateSwaggerPathForOperationImport(IEdmFunctionImport operationImport,  bool disableSAML)
         {
             JArray swaggerParameters = new JArray();
             foreach (var parameter in operationImport.Parameters)
             {
                 swaggerParameters.Parameter(parameter.Name, operationImport is IEdmFunctionImport ? "path" : "body",
                     "parameter: " + parameter.Name, parameter.Type.Definition, required: true);
+            }
+
+            if (disableSAML)
+            {
+                swaggerParameters.Parameter("saml2", "query", "Disable SAML SSO", "string");
             }
 
             JObject swaggerResponses = new JObject();
