@@ -213,6 +213,7 @@ namespace OdataSwaggerConverter
         static void Main(string[] args)
 
         {
+            string samlDisabled = "saml2=disabled";
             bool disableSAML = false;
 
             string username = null;
@@ -225,24 +226,29 @@ namespace OdataSwaggerConverter
                 return;
             }
 
+            string outputFile = args[1];
+            var metadataURI = args[0];
+
             if (args.Length == 4)
             {
                 username = args[2];
                 password = args[3];
             }else if(args.Length == 5 || args.Length == 3)
             {
-                string samlFlag = args[4];
-                if (samlFlag.Equals("saml2=disabled"))
+                username = args[2];
+                password = args[3];
+                string samlFlag = args[4].Trim();
+                if (samlFlag.Equals(samlDisabled))
                 {
                     disableSAML = true;
+                    metadataURI = metadataURI + "?" + samlDisabled;
                 }
             }
 
 
           
 
-            string outputFile = args[1];
-            var metadataURI = args[0];
+          
 
             IEdmModel model = null;
             if (username != null && password != null)
