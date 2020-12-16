@@ -245,11 +245,6 @@ namespace OdataSwaggerConverter
                 }
             }
 
-
-          
-
-          
-
             IEdmModel model = null;
             if (username != null && password != null)
             {
