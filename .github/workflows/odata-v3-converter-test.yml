@@ -20,8 +20,11 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Restore dependencies
+      working-directory: ${{env.workingDirectory}}
       run: dotnet restore
     - name: Build
+      working-directory: ${{env.workingDirectory}}
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ${{env.workingDirectory}}
       run: dotnet test --no-build --verbosity normal
