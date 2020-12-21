@@ -255,7 +255,6 @@ namespace Axway.apim.V3ODataSwaggerConverter
             IEdmModel model = null;
             if (username != null && password != null)
             {
-
                 XmlUrlResolver resolver = new XmlUrlResolver();
                 resolver.Credentials = new NetworkCredential(username, password);
 
@@ -362,17 +361,6 @@ namespace Axway.apim.V3ODataSwaggerConverter
                     // Console.WriteLine(entity);
                 }
             }
-
-
-            /*foreach (var schemaElement in model.SchemaElements)
-
-
-            {
-             
-            }*/
-
-
-
 
                 swaggeDefinitions.Add("_Error", new JObject()
             {

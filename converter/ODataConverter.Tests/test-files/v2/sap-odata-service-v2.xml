@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<edmx:Edmx xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData" Version="1.0">
+	<edmx:DataServices m:DataServiceVersion="2.0">
+		<Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" Namespace="YGW_LGETM_SRV" xml:lang="de" sap:schema-version="1">
+			<EntityType Name="DocuList" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+					<PropertyRef Name="Instid" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Instid" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="INSTID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docnam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="DOCNAM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docdes" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="DOCDES" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docla" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="DOCLA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Crdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="CRDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Chdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="CHDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileExt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="FILE_EXT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="Docu" Relationship="YGW_LGETM_SRV.Test_DOKU" FromRole="FromRole_Test_DOKU" ToRole="ToRole_Test_DOKU" />
+			</EntityType>
+			<EntityType Name="Docu" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Instid" />
+				</Key>
+				<Property Name="Instid" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="Instanz-ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileName" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Textfeld Länge 255" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileType" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="FILE_TYPE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="String" Type="Edm.Binary" Nullable="false" sap:unicode="false" sap:label="binärer String" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="DocListSet" Relationship="YGW_LGETM_SRV.Test_DOKU" FromRole="ToRole_Test_DOKU" ToRole="FromRole_Test_DOKU" />
+			</EntityType>
+			<EntityType Name="EquiPart" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Parvw" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="PARVW" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Parnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PARNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="EQUI01" Relationship="YGW_LGETM_SRV.EquiPartner" FromRole="ToRole_EquiPartner" ToRole="FromRole_EquiPartner" />
+			</EntityType>
+			<EntityType Name="EquiAtta" m:HasStream="true" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Instid" />
+				</Key>
+				<Property Name="Instid" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="Instanz-ID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileName" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Textfeld Länge 255" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileType" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="FILE_TYPE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="MimeType" Type="Edm.String" Nullable="false" MaxLength="128" sap:unicode="false" sap:label="Mime-Typ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="String" Type="Edm.Binary" Nullable="false" sap:unicode="false" sap:label="binärer String" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="EquiAttaList" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+					<PropertyRef Name="Instid" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Instid" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="INSTID" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docnam" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="DOCNAM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docdes" Type="Edm.String" Nullable="false" MaxLength="50" sap:unicode="false" sap:label="DOCDES" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docla" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="DOCLA" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Crdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="CRDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Chdat" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="CHDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileExt" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="FILE_EXT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="EquiHierarchy" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Sernr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="SERNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eqart" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="EQART" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Hequi" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="HEQUI" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="EquiHist" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Sernr" />
+					<PropertyRef Name="Artikelnr" />
+					<PropertyRef Name="Obknr" />
+					<PropertyRef Name="Docnr" />
+				</Key>
+				<Property Name="Sernr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="SERNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Obknr" Type="Edm.Int32" Nullable="false" sap:unicode="false" sap:label="OBKNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docnr" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="DOCNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Docitm" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="DOCITM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Datum" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="DATUM" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Doctype" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="DOCTYPE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Ktext" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="KTEXT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="EquiList" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="ARTNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="MATNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Sernr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="SERNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Datab" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="DATAB" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Datbi" Type="Edm.DateTime" Nullable="false" Precision="7" sap:unicode="false" sap:label="DATBI" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eqart" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="EQART" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybau" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="YYBAU" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyerz" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="YYERZ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Vkbur" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Verkaufsbüro" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Parvw" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="PARVW" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Parnr" Type="Edm.String" Nullable="false" MaxLength="12" sap:unicode="false" sap:label="PARNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="SDOK" m:HasStream="true" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+					<PropertyRef Name="Dokar" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Article number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Dokar" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="Dokumentart" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="FileName" Type="Edm.String" Nullable="false" MaxLength="255" sap:unicode="false" sap:label="Dateiname" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="MimeType" Type="Edm.String" Nullable="false" MaxLength="128" sap:unicode="false" sap:label="Mime-Typ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Xstring" Type="Edm.Binary" Nullable="false" sap:unicode="false" sap:label="binärer String" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</EntityType>
+			<EntityType Name="EquiTXT" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Article number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybautxt" Type="Edm.String" Nullable="false" MaxLength="70" sap:unicode="false" sap:label="Description series" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyerztxt" Type="Edm.String" Nullable="false" MaxLength="25" sap:unicode="false" sap:label="Text manufactured type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="VkburBezei" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eartx" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Text for Object Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyzyltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description cylinder" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yykdgrptxt" Type="Edm.String" Nullable="false" MaxLength="20" sap:unicode="false" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyeattxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Application Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyawgtxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Description Application group" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="EQUI01" Relationship="YGW_LGETM_SRV.EquiTXT_ASS" FromRole="ToRole_EquiTXT_ASS" ToRole="FromRole_EquiTXT_ASS" />
+			</EntityType>
+			<EntityType Name="EquiStatus" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Article number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Istat" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="Systemstatus" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Inact" Type="Edm.String" Nullable="false" MaxLength="1" sap:unicode="false" sap:label="Status inakt." sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Txt04" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Txt30" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="Status" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="EQUI01" Relationship="YGW_LGETM_SRV.EquiStatus_ASS" FromRole="ToRole_EquiStatus_ASS" ToRole="FromRole_EquiStatus_ASS" />
+			</EntityType>
+			<EntityType Name="EQUI01" sap:content-version="1">
+				<Key>
+					<PropertyRef Name="Artikelnr" />
+				</Key>
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Article number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Matnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="MATNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Maktx" Type="Edm.String" Nullable="false" MaxLength="40" sap:unicode="false" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Sernr" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="SERNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Kunde" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="KUNDE" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Name1" Type="Edm.String" Nullable="false" MaxLength="35" sap:unicode="false" sap:label="Name" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Inbdt" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="INBDT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Datab" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Gültig ab" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Datbi" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="Gültig bis" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yylidat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="YYLIDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybau" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="YYBAU" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyerz" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="YYERZ" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Vkbur" Type="Edm.String" Nullable="false" MaxLength="4" sap:unicode="false" sap:label="Verkaufsbüro" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eqart" Type="Edm.String" Nullable="false" MaxLength="10" sap:unicode="false" sap:label="EQART" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eqfnr" Type="Edm.String" Nullable="false" MaxLength="30" sap:unicode="false" sap:label="EQFNR" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyzyl" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="YYZYL" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yykdgrp" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="YYKDGRP" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyeat" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="YYEAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyawg" Type="Edm.String" Nullable="false" MaxLength="3" sap:unicode="false" sap:label="YYAWG" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Klasse" Type="Edm.String" Nullable="false" MaxLength="18" sap:unicode="false" sap:label="Klasse" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yydrehzahl" Type="Edm.Decimal" Nullable="false" Precision="10" Scale="0" sap:unicode="false" sap:label="YYDREHZAHL" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyleistung" Type="Edm.Decimal" Nullable="false" Precision="10" Scale="0" sap:unicode="false" sap:label="YYLEISTUNG" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybetrstd" Type="Edm.Decimal" Nullable="false" Precision="6" Scale="0" sap:unicode="false" sap:label="YYBETRSTD" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybetrdat" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="YYBETRDAT" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<NavigationProperty Name="EquiStatusSet" Relationship="YGW_LGETM_SRV.EquiStatus_ASS" FromRole="FromRole_EquiStatus_ASS" ToRole="ToRole_EquiStatus_ASS" />
+				<NavigationProperty Name="EquiTXT" Relationship="YGW_LGETM_SRV.EquiTXT_ASS" FromRole="FromRole_EquiTXT_ASS" ToRole="ToRole_EquiTXT_ASS" />
+				<NavigationProperty Name="EquiPartSet" Relationship="YGW_LGETM_SRV.EquiPartner" FromRole="FromRole_EquiPartner" ToRole="ToRole_EquiPartner" />
+			</EntityType>
+			<ComplexType Name="EquiText">
+				<Property Name="Artikelnr" Type="Edm.String" Nullable="false" MaxLength="18" sap:label="Article number" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yybautxt" Type="Edm.String" Nullable="false" MaxLength="70" sap:label="Description series" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyerztxt" Type="Edm.String" Nullable="false" MaxLength="25" sap:label="Text manufactured type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="VkburBezei" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Eartx" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Text for Object Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyzyltxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Description cylinder" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yykdgrptxt" Type="Edm.String" Nullable="false" MaxLength="20" sap:label="Bezeichnung" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyeattxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Application Type" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+				<Property Name="Yyawgtxt" Type="Edm.String" Nullable="false" MaxLength="40" sap:label="Description Application group" sap:creatable="false" sap:updatable="false" sap:sortable="false" sap:filterable="false" />
+			</ComplexType>
+			<Association Name="EquiPartner" sap:content-version="1">
+				<End Type="YGW_LGETM_SRV.EQUI01" Multiplicity="1" Role="FromRole_EquiPartner" />
+				<End Type="YGW_LGETM_SRV.EquiPart" Multiplicity="*" Role="ToRole_EquiPartner" />
+				<ReferentialConstraint>
+					<Principal Role="FromRole_EquiPartner">
+						<PropertyRef Name="Artikelnr" />
+					</Principal>
+					<Dependent Role="ToRole_EquiPartner">
+						<PropertyRef Name="Artikelnr" />
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="EquiTXT_ASS" sap:content-version="1">
+				<End Type="YGW_LGETM_SRV.EQUI01" Multiplicity="1" Role="FromRole_EquiTXT_ASS" />
+				<End Type="YGW_LGETM_SRV.EquiTXT" Multiplicity="1" Role="ToRole_EquiTXT_ASS" />
+				<ReferentialConstraint>
+					<Principal Role="FromRole_EquiTXT_ASS">
+						<PropertyRef Name="Artikelnr" />
+					</Principal>
+					<Dependent Role="ToRole_EquiTXT_ASS">
+						<PropertyRef Name="Artikelnr" />
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="EquiStatus_ASS" sap:content-version="1">
+				<End Type="YGW_LGETM_SRV.EQUI01" Multiplicity="1" Role="FromRole_EquiStatus_ASS" />
+				<End Type="YGW_LGETM_SRV.EquiStatus" Multiplicity="*" Role="ToRole_EquiStatus_ASS" />
+				<ReferentialConstraint>
+					<Principal Role="FromRole_EquiStatus_ASS">
+						<PropertyRef Name="Artikelnr" />
+					</Principal>
+					<Dependent Role="ToRole_EquiStatus_ASS">
+						<PropertyRef Name="Artikelnr" />
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<Association Name="Test_DOKU" sap:content-version="1">
+				<End Type="YGW_LGETM_SRV.DocList" Multiplicity="*" Role="FromRole_Test_DOKU" />
+				<End Type="YGW_LGETM_SRV.Docu" Multiplicity="1" Role="ToRole_Test_DOKU" />
+				<ReferentialConstraint>
+					<Principal Role="FromRole_Test_DOKU">
+						<PropertyRef Name="Instid" />
+						<PropertyRef Name="Artikelnr" />
+					</Principal>
+					<Dependent Role="ToRole_Test_DOKU">
+						<PropertyRef Name="Instid" />
+						<PropertyRef Name="Instid" />
+					</Dependent>
+				</ReferentialConstraint>
+			</Association>
+			<EntityContainer Name="YGW_LGETM_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+				<EntitySet Name="DocListSet" EntityType="YGW_LGETM_SRV.DocList" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="DocuSet" EntityType="YGW_LGETM_SRV.Docu" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiPartSet" EntityType="YGW_LGETM_SRV.EquiPart" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiAttaSet" EntityType="YGW_LGETM_SRV.EquiAtta" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiAttaListSet" EntityType="YGW_LGETM_SRV.EquiAttaList" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiHierarchySet" EntityType="YGW_LGETM_SRV.EquiHierarchy" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiHistSet" EntityType="YGW_LGETM_SRV.EquiHist" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiListSet" EntityType="YGW_LGETM_SRV.EquiList" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:searchable="true" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="SDOKSet" EntityType="YGW_LGETM_SRV.SDOK" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiTXTSet" EntityType="YGW_LGETM_SRV.EquiTXT" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EquiStatusSet" EntityType="YGW_LGETM_SRV.EquiStatus" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<EntitySet Name="EQUI01Set" EntityType="YGW_LGETM_SRV.EQUI01" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:pageable="false" sap:content-version="1" />
+				<AssociationSet Name="Test_DOKUSet" Association="YGW_LGETM_SRV.Test_DOKU" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="DocListSet" Role="FromRole_Test_DOKU" />
+					<End EntitySet="DocuSet" Role="ToRole_Test_DOKU" />
+				</AssociationSet>
+				<AssociationSet Name="EquiStatus_ASSSet" Association="YGW_LGETM_SRV.EquiStatus_ASS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="EQUI01Set" Role="FromRole_EquiStatus_ASS" />
+					<End EntitySet="EquiStatusSet" Role="ToRole_EquiStatus_ASS" />
+				</AssociationSet>
+				<AssociationSet Name="EquiPartnerSet" Association="YGW_LGETM_SRV.EquiPartner" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="EQUI01Set" Role="FromRole_EquiPartner" />
+					<End EntitySet="EquiPartSet" Role="ToRole_EquiPartner" />
+				</AssociationSet>
+				<AssociationSet Name="EquiTXT_ASSSet" Association="YGW_LGETM_SRV.EquiTXT_ASS" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+					<End EntitySet="EQUI01Set" Role="FromRole_EquiTXT_ASS" />
+					<End EntitySet="EquiTXTSet" Role="ToRole_EquiTXT_ASS" />
+				</AssociationSet>
+			</EntityContainer>
+			<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="self" href="https://MY-SAP:443/sap/opu/odata/sap/ANY_SRV/$metadata" />
+			<atom:link xmlns:atom="http://www.w3.org/2005/Atom" rel="latest-version" href="https://MY-SAP:443/sap/opu/odata/sap/ANY_SRV/$metadata" />
+		</Schema>
+	</edmx:DataServices>
+</edmx:Edmx>
