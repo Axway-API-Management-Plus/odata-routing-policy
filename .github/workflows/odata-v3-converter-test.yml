@@ -8,7 +8,9 @@ on:
 
 jobs:
   build:
-
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    env:
+      workingDirectory: 'converter/odata3'
     runs-on: ubuntu-latest
 
     steps:
