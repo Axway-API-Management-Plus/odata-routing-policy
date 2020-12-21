@@ -5,6 +5,10 @@ using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Xml;
 using System.Net;
+using log4net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace OdataSwaggerConverter
 {
@@ -210,9 +214,23 @@ namespace OdataSwaggerConverter
     }
     class Program
     {
+
+        private static CredentialCache GetCredential(string url)
+        {
+            
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            CredentialCache credentialCache = new CredentialCache();
+            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential("tomcat", "tomcat"));
+            return credentialCache;
+        }
+
+        private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         static void Main(string[] args)
 
         {
+            //log4net.Config.BasicConfigurator.Configure();
+            log.Debug("Converting odatav3 document");
+
             string samlDisabled = "saml2=disabled";
             bool disableSAML = false;
 
@@ -227,7 +245,7 @@ namespace OdataSwaggerConverter
             }
 
             string outputFile = args[1];
-            var metadataURI = args[0];
+            string metadataURI = args[0];
 
             if (args.Length == 4)
             {
@@ -244,35 +262,17 @@ namespace OdataSwaggerConverter
                     metadataURI = metadataURI + "?" + samlDisabled;
                 }
             }
-
-            IEdmModel model = null;
-            if (username != null && password != null)
-            {
-
-                XmlUrlResolver resolver = new XmlUrlResolver();
-                resolver.Credentials = new NetworkCredential(username, password);
-
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.XmlResolver = resolver;
-                model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI,settings));
-            }
-            else
-            {
-
-               model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI));
-            }
-
-            
             var url = new Uri(metadataURI);
             var host = url.Host;
             int port = url.Port;
-           
+
             bool portAppend = false;
 
-            if(port == 80  )
+            if (port == 80)
             {
                 portAppend = false;
-            }else if(port == 443)
+            }
+            else if (port == 443)
             {
                 portAppend = false;
             }
@@ -287,6 +287,45 @@ namespace OdataSwaggerConverter
             }
             var version = "1.0.0";
             var protocol = url.Scheme;
+
+            IEdmModel model = null;
+            try
+            {
+                if (username != null && password != null)
+                {
+                    log.Debug("Fetch meta data with basic auth");
+                     /* XmlUrlResolver resolver = new XmlUrlResolver();
+                       NetworkCredential credential = new NetworkCredential(username, password);
+                       resolver.Credentials = credential;
+                  
+                       XmlReaderSettings settings = new XmlReaderSettings();
+                       settings.XmlResolver = resolver;*/
+
+                    WebClient client = new WebClient();
+                    string credentials = Convert.ToBase64String(
+                     Encoding.ASCII.GetBytes(username + ":" + password));
+                    client.Headers[HttpRequestHeader.Authorization] = string.Format(
+                        "Basic {0}", credentials);
+                    var result = client.DownloadData(url);
+                    log.Debug("Meta data " + System.Text.Encoding.Default.GetString(result));
+                    MemoryStream memoryStream = new MemoryStream(result);
+                    model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(memoryStream));
+
+                    // model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI, settings));
+                }
+                else
+                {
+
+                    model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI));
+                }
+            }catch(Exception e)
+            {
+                log.Error("Problem in reading meta data file", e);
+                return;
+            }
+
+            
+            
             
             var basePath = url.AbsolutePath;
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
