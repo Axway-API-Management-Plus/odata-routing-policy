@@ -36,7 +36,7 @@ namespace OdataSwaggerConverter
         public static JObject Response(this JObject responses, string name, string description, IEdmType type)
         {
             var schema = new JObject();
-            Program.SetSwaggerType(schema, type);
+            AxwayODataV3Converter.SetSwaggerType(schema, type);
 
             responses.Add(name, new JObject()
             {
@@ -141,7 +141,7 @@ namespace OdataSwaggerConverter
 
             if (kind != "body")
             {
-                Program.SetSwaggerType(parameter, type);
+                AxwayODataV3Converter.SetSwaggerType(parameter, type);
             }
             else
             {
@@ -208,7 +208,7 @@ namespace OdataSwaggerConverter
         }
 
     }
-    class Program
+    class AxwayODataV3Converter
     {
         static void Main(string[] args)
 
