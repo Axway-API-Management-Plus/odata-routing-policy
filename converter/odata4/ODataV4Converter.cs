@@ -649,7 +649,7 @@ namespace OData2Swagger
 
             IEdmModel model;
             IEnumerable<EdmError> errors;
-            EdmxReader.TryParse(reader, out model, out errors);
+            CsdlReader.TryParse(reader, out model, out errors);
 
             JObject swaggerDoc = new JObject()
             {

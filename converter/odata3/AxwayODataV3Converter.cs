@@ -6,7 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Net;
 
-namespace OdataSwaggerConverter
+namespace Axway.apim.V3ODataSwaggerConverter
 {
     public static class ExtensionMethods
     {
@@ -208,11 +208,18 @@ namespace OdataSwaggerConverter
         }
 
     }
-    class AxwayODataV3Converter
-    {
-        static void Main(string[] args)
+}
 
-        {
+namespace Axway.apim.V3ODataSwaggerConverter
+{
+    public class AxwayODataV3Converter
+    {
+        static void Main(string[] args) {
+            AxwayODataV3Converter conveter = new AxwayODataV3Converter();
+            conveter.Convert(args);
+        }
+
+        public void Convert(string[] args) {
             string samlDisabled = "saml2=disabled";
             bool disableSAML = false;
 
