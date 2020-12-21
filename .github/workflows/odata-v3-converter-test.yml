@@ -21,10 +21,10 @@ jobs:
       run: dotnet --list-sdks
     - name: Restore dependencies
       working-directory: ${{env.workingDirectory}}
-      run: dotnet restore
+      run: dotnet restore OdataV3SwaggerConverter.csproj
     - name: Build
       working-directory: ${{env.workingDirectory}}
-      run: dotnet build --no-restore -f net45
+      run: dotnet build --no-restore OdataV3SwaggerConverter.csproj
     - name: Test
       working-directory: ${{env.workingDirectory}}
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal OdataV3SwaggerConverter.csproj
