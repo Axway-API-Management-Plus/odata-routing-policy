@@ -26,7 +26,7 @@ jobs:
       run: dotnet restore
     - name: Build
       working-directory: ${{env.workingDirectory}}
-      run: dotnet build --no-restore -f net45
+      run: dotnet build --no-restore
     - name: Test
       working-directory: ${{env.workingDirectory}}
       run: dotnet test --no-build --verbosity normal
