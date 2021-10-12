@@ -1,2 +1,6 @@
-
 images/Routing-Policy.pptx
+converter/odata/bin/*
+converter/odata/obj/*
+converter/odata/packages/*
+.vs/*
+converter/odata/.vs/*
