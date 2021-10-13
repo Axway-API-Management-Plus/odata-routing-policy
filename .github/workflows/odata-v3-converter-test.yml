@@ -11,22 +11,18 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     env:
       workingDirectory: 'converter/odata'
-    runs-on: windows-latest
+    runs-on: windows-2019
 
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '5.0.x'
+      shell: cmd
+      run: call .\Build.cmd
     - name: List SDKs
       run: dotnet --list-sdks
     - name: Restore dependencies
       working-directory: ${{env.workingDirectory}}
       run: dotnet restore
-    - name: Build
-      working-directory: ${{env.workingDirectory}}
-      run: dotnet build --configuration Release --no-restore
     - name: Test
       working-directory: ${{env.workingDirectory}}
       run: dotnet test --no-build --verbosity normal
