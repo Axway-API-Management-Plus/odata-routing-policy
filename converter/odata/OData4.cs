@@ -1,7 +1,4 @@
-﻿// Copyright (c) Microsoft Corporation.  All rights reserved.
-// Licensed under the MIT License.  See License.txt in the project root for license information.
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System;
 using System.Text;
@@ -14,210 +11,19 @@ using Newtonsoft.Json.Linq;
 using System.Net;
 using Newtonsoft.Json;
 
-namespace OData2Swagger
+namespace OdataSwaggerConverter
 {
-    public static class ExtensionMethods
-    {
-        public static JObject Responses(this JObject jObject, JObject responses)
-        {
-            jObject.Add("responses", responses);
-
-            return jObject;
-        }
-
-        public static JObject ResponseRef(this JObject responses, string name, string description, string refType)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-                {
-                    "schema", new JObject()
-                    {
-                        {"$ref", refType}
-                    }
-                }
-            });
-
-            return responses;
-        }
-
-        public static JObject Response(this JObject responses, string name, string description, IEdmType type)
-        {
-            var schema = new JObject();
-            Program.SetSwaggerType(schema, type);
-
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-                {"schema", schema}
-            });
-
-            return responses;
-        }
-
-        public static JObject ResponseArrayRef(this JObject responses, string name, string description, string refType)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-                {
-                    "schema", new JObject()
-                    {
-                        {"type", "array"},
-                        {
-                            "items", new JObject()
-                            {
-                                {"$ref", refType}
-                            }
-                        }
-                    }
-                }
-            });
-
-            return responses;
-        }
-
-        public static JObject DefaultErrorResponse(this JObject responses)
-        {
-            return responses.ResponseRef("default", "Unexpected error", "#/definitions/_Error");
-        }
-
-        public static JObject Response(this JObject responses, string name, string description)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-            });
-
-            return responses;
-        }
-
-        public static JObject Parameters(this JObject jObject, JArray parameters)
-        {
-            jObject.Add("parameters", parameters);
-
-            return jObject;
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            string type)
-        {
-            return Parameter(parameters, name, kind, description, type, format: null, required: null);
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            string type, string format = null, bool? required = null)
-        {
-            parameters.Add(new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description},
-                {"type", type},
-            });
-
-            if (!string.IsNullOrEmpty(format))
-            {
-                (parameters.Last as JObject).Add("format", format);
-            }
-            if (required != null)
-            {
-                (parameters.Last as JObject).Add("required", required);
-            }
-
-            return parameters;
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            IEdmType type)
-        {
-            return Parameter(parameters, name, kind, description, type, required: null);
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            IEdmType type, bool? required)
-        {
-            var parameter = new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description},
-            };
-
-            if (kind != "body")
-            {
-                Program.SetSwaggerType(parameter, type);    
-            }
-            else
-            {
-                var schema = new JObject();
-                Program.SetSwaggerType(schema, type);
-                parameter.Add("schema", schema);
-            }
-
-            if (required != null)
-            {
-                parameter.Add("required", required);
-            }
-
-            parameters.Add(parameter);
-
-            return parameters;
-        }
-
-        public static JArray ParameterRef(this JArray parameters, string name, string kind, string description, string refType)
-        {
-            parameters.Add(new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description},
-                {
-                    "schema", new JObject()
-                    {
-                        {"$ref", refType}
-                    }
-                }
-            });
-
-            return parameters;
-        }
-
-        public static JObject Tags(this JObject jObject, params string[] tags)
-        {
-            jObject.Add("tags", new JArray(tags));
-
-            return jObject;
-        }
-
-        public static JObject Summary(this JObject jObject, string summary)
-        {
-            jObject.Add("summary", summary);
-
-            return jObject;
-        }
-
-        public static JObject Description(this JObject jObject, string description)
-        {
-            jObject.Add("description", description);
-
-            return jObject;
-        }
-
-    }
-
-    class Program
+    class OData4
     {
         //private const string metadataURI = "http://services.odata.org/V4/TripPinServiceRW/$metadata";
-       // private const string host = "services.odata.org";
+        // private const string host = "services.odata.org";
         //private const string version = "0.1.0";
         //private const string basePath = "/V4/(S(cnbm44wtbc1v5bgrlek5lpcc))/TripPinServiceRW";
-      //  private const string outputFile = @"swagger.json";
+        //  private const string outputFile = @"swagger.json";
 
         static JObject CreateSwaggerPathForEntitySet(IEdmEntitySet entitySet)
         {
             return new JObject()
-
             {
                 {
                     "get", new JObject()
@@ -273,15 +79,13 @@ namespace OData2Swagger
                         .Description("Returns the entity with the key from " + entitySet.Name)
                         .Tags(entitySet.Name)
                         .Parameters((keyParameters.DeepClone() as JArray)
-                          
-                          
                             .Parameter("$expand", "query", "Expand navigation property", "string")
                             .Parameter("$select", "query", "select structural property", "string")
                             .Parameter("$orderby", "query", "order by some property", "string")
                             .Parameter("$top", "query", "top elements", "integer")
                             .Parameter("$skip", "query", "skip elements", "integer")
                             .Parameter("$count", "query", "inlcude count in response", "boolean")
-                        
+
                         )
                         .Responses(new JObject()
                             .Response("200", "EntitySet " + entitySet.Name, entitySet.EntityType())
@@ -400,7 +204,7 @@ namespace OData2Swagger
                 .Summary("Call operation  " + operation.Name)
                 .Description("Call operation  " + operation.Name)
                 .Tags(entitySet.Name, operation is IEdmFunction ? "Function" : "Action");
-                
+
 
             if (swaggerParameters.Count > 0)
             {
@@ -421,7 +225,7 @@ namespace OData2Swagger
             {
                 string format;
                 string type = GetPrimitiveTypeAndFormat(key.Type.Definition as IEdmPrimitiveType, out format);
-                bool required = !key.Type.IsNullable ;
+                bool required = !key.Type.IsNullable;
                 swaggerParameters.Parameter(key.Name, "path", "key: " + key.Name, type, format, required);
             }
 
@@ -549,221 +353,162 @@ namespace OData2Swagger
             };
         }
 
-        public static string Get(string uri, String username, String password)
-        {
-
-           
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
-            if (username != null && password != null)
-            {
-               
-                string credential = username + ":" + password;
-                string authHeader = Convert.ToBase64String(Encoding.Default.GetBytes(credential));
-                request.Headers["Authorization"] = "Basic " + authHeader;
-            }
-            request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
-
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            using (StreamReader reader = new StreamReader(stream))
-            {
-                return reader.ReadToEnd();
-            }
-        }
-
+       
         static void Main(string[] args)
         {
             string username = null;
             string password = null;
-         
+
             if (args.Length < 2)
             {
                 Console.WriteLine("Invalid command line arguments");
                 Console.WriteLine("Example : OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW trip.json");
                 return;
             }
-          
-            if(args.Length == 4)
+
+            if (args.Length == 4)
             {
                 username = args[2];
                 password = args[3];
             }
+            
+        }
 
-        
-
-            string output = Get(args[0], username,password);
-            string outputFile = args[1];
+        public static void process(Uri uri, string username, string password, string response, string outputFile)
+        {
             //Console.WriteLine(output);
-            var results = JsonConvert.DeserializeObject<dynamic>(output);
+            var results = JsonConvert.DeserializeObject<dynamic>(response);
             var metadataURI = results["@odata.context"].Value;
-           
             var url = new Uri(metadataURI);
             var host = url.Host;
             int port = url.Port;
 
-            bool portAppend = false;
-
-            if (port == 80)
-            {
-                portAppend = false;
-            }
-            else if (port == 443)
-            {
-                portAppend = false;
-            }
-            else
-            {
-                portAppend = true;
-            }
-
-            if (portAppend)
+            if (!(port == 80 || port == 443))
             {
                 host = host + ":" + port;
             }
+
             var version = "1.0.0";
             var protocol = url.Scheme;
             var basePath = url.AbsolutePath;
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
-
-
-            XmlReader reader = null;
-
-            if (username != null && password != null) {
-               
-                XmlUrlResolver resolver = new XmlUrlResolver();
-                resolver.Credentials = new NetworkCredential(username, password);
-
-                XmlReaderSettings settings = new XmlReaderSettings();
-                settings.XmlResolver = resolver;
-                reader = XmlReader.Create(metadataURI, settings);
-            }
-            else
+           
+            HttpResponseValue httpResponseValue = Util.Get(metadataURI, username, password);
+            if (httpResponseValue.getStatusCode() == 200)
             {
-                reader = XmlReader.Create(metadataURI);
-            }
-
-
-
-
-
-            IEdmModel model;
-            IEnumerable<EdmError> errors;
-            EdmxReader.TryParse(reader, out model, out errors);
-
-            JObject swaggerDoc = new JObject()
-            {
-                {"swagger", "2.0"},
-                {"info", new JObject()
+                StringReader stringReader = new StringReader(httpResponseValue.getResponseBody());
+                XmlReader reader = XmlReader.Create(stringReader);
+                IEdmModel model;
+                IEnumerable<EdmError> errors;
+                CsdlReader.TryParse(reader, out model, out errors);
+                JObject swaggerDoc = new JObject()
                 {
-                    {"title", "OData Service"},
-                    {"description", "The OData Service at " + metadataURI},
-                    {"version", version},
-                    {"x-odata-version", "4.0"}
-                }},
-                {"host", host},
-                {"schemes", new JArray(protocol)},
-                {"basePath", basePath},
-                {"consumes", new JArray("application/json")},
-                {"produces", new JArray("application/json")},
-            };
+                    {"swagger", "2.0"},
+                    {"info", new JObject()
+                    {
+                        {"title", "OData Service"},
+                        {"description", "The OData Service at " + metadataURI},
+                        {"version", version},
+                        {"x-odata-version", "4.0"}
+                    }},
+                    {"host", host},
+                    {"schemes", new JArray(protocol)},
+                    {"basePath", basePath},
+                    {"consumes", new JArray("application/json")},
+                    {"produces", new JArray("application/json")},
+                };
 
-            JObject swaggerPaths = new JObject();
-            swaggerDoc.Add("paths", swaggerPaths);
-            JObject swaggeDefinitions = new JObject();
-            swaggerDoc.Add("definitions", swaggeDefinitions);
-            
-            foreach (var entitySet in model.EntityContainer.EntitySets())
-            {
-                swaggerPaths.Add("/" + entitySet.Name + "*" , CreateSwaggerPathForEntitySet(entitySet));
+                JObject swaggerPaths = new JObject();
+                swaggerDoc.Add("paths", swaggerPaths);
+                JObject swaggeDefinitions = new JObject();
+                swaggerDoc.Add("definitions", swaggeDefinitions);
 
-                swaggerPaths.Add(GetPathForEntity(entitySet)+"*", CreateSwaggerPathForEntity(entitySet));
-            }
-
-            
-
-
-            foreach (var operationImport in model.EntityContainer.OperationImports())
-            {
-                swaggerPaths.Add(GetPathForOperationImport(operationImport)+"*", CreateSwaggerPathForOperationImport(operationImport));
-            }
-
-            foreach (var type in model.SchemaElements.OfType<IEdmStructuredType>())
-            {
-                swaggeDefinitions.Add(type.FullTypeName(), CreateSwaggerDefinitionForStructureType(type));
-            }
-
-            foreach (var operation in model.SchemaElements.OfType<IEdmOperation>())
-            {
-                // skip unbound operation
-                if (!operation.IsBound)
+                foreach (var entitySet in model.EntityContainer.EntitySets())
                 {
-                    continue;
+                    swaggerPaths.Add("/" + entitySet.Name + "*", CreateSwaggerPathForEntitySet(entitySet));
+                    swaggerPaths.Add(GetPathForEntity(entitySet) + "*", CreateSwaggerPathForEntity(entitySet));
+                }
+                foreach (var operationImport in model.EntityContainer.OperationImports())
+                {
+                    swaggerPaths.Add(GetPathForOperationImport(operationImport) + "*", CreateSwaggerPathForOperationImport(operationImport));
                 }
 
-                var boundParameter = operation.Parameters.First();
-                var boundType = boundParameter.Type.Definition;
-
-                // skip operation bound to non entity (or entity collection)
-                if (boundType.TypeKind == EdmTypeKind.Entity)
+                foreach (var type in model.SchemaElements.OfType<IEdmStructuredType>())
                 {
-                    IEdmEntityType entityType = boundType as IEdmEntityType;
-                    foreach (
-                        var entitySet in
-                            model.EntityContainer.EntitySets().Where(es => es.EntityType().Equals(entityType)))
+                    swaggeDefinitions.Add(type.FullTypeName(), CreateSwaggerDefinitionForStructureType(type));
+                }
+
+                foreach (var operation in model.SchemaElements.OfType<IEdmOperation>())
+                {
+                    // skip unbound operation
+                    if (!operation.IsBound)
                     {
-                        swaggerPaths.Add(GetPathForOperationOfEntity(operation, entitySet)+"*",
-                            CreateSwaggerPathForOperationOfEntity(operation, entitySet));
+                        continue;
                     }
-                }
-
-                else if (boundType.TypeKind == EdmTypeKind.Collection &&
-                         (boundType as IEdmCollectionType).ElementType.Definition.TypeKind == EdmTypeKind.Entity)
-                {
-                    IEdmEntityType entityType = boundType as IEdmEntityType;
-                    foreach (
-                        var entitySet in
-                            model.EntityContainer.EntitySets().Where(es => es.EntityType().Equals(entityType)))
+                    var boundParameter = operation.Parameters.First();
+                    var boundType = boundParameter.Type.Definition;
+                    // skip operation bound to non entity (or entity collection)
+                    if (boundType.TypeKind == EdmTypeKind.Entity)
                     {
-                        swaggerPaths.Add(GetPathForOperationOfEntitySet(operation, entitySet)+"*",
-                            CreateSwaggerPathForOperationOfEntitySet(operation, entitySet));
-                    }
-                }
-            }
-
-            swaggeDefinitions.Add("_Error", new JObject()
-            {
-                {
-                    "properties", new JObject()
-                    {
-                        {"error", new JObject()
+                        IEdmEntityType entityType = boundType as IEdmEntityType;
+                        foreach (var entitySet in
+                                model.EntityContainer.EntitySets().Where(es => es.EntityType().Equals(entityType)))
                         {
-                            {"$ref", "#/definitions/_InError"}  
-                        }
-                        }
-                    }
-                }
-            });
-            swaggeDefinitions.Add("_InError", new JObject()
-            {
-                {
-                    "properties", new JObject()
-                    {
-                        {"code", new JObject()
-                        {
-                            {"type", "string"}  
-                        }
-                        },
-                        {"message", new JObject()
-                        {
-                            {"type", "string"}  
-                        }
+                            swaggerPaths.Add(GetPathForOperationOfEntity(operation, entitySet) + "*",
+                                CreateSwaggerPathForOperationOfEntity(operation, entitySet));
                         }
                     }
-                }
-            });
 
-            File.WriteAllText(outputFile, swaggerDoc.ToString());
+                    else if (boundType.TypeKind == EdmTypeKind.Collection &&
+                             (boundType as IEdmCollectionType).ElementType.Definition.TypeKind == EdmTypeKind.Entity)
+                    {
+                        IEdmEntityType entityType = boundType as IEdmEntityType;
+                        foreach (
+                            var entitySet in
+                                model.EntityContainer.EntitySets().Where(es => es.EntityType().Equals(entityType)))
+                        {
+                            swaggerPaths.Add(GetPathForOperationOfEntitySet(operation, entitySet) + "*",
+                                CreateSwaggerPathForOperationOfEntitySet(operation, entitySet));
+                        }
+                    }
+                }
+
+                swaggeDefinitions.Add("_Error", new JObject()
+                {
+                    {
+                        "properties", new JObject()
+                        {
+                            {
+                                "error", new JObject()
+                                {
+                                    {"$ref", "#/definitions/_InError"}
+                                }
+                            }
+                        }
+                    }
+                });
+                swaggeDefinitions.Add("_InError", new JObject()
+                {
+                    {
+                        "properties", new JObject()
+                        {
+                            {
+                                "code", new JObject()
+                                {
+                                    {"type", "string"}
+                                }
+                            },
+                            {
+                                "message", new JObject()
+                                {
+                                    {"type", "string"}
+                                }
+                            }
+                        }
+                    }
+                });
+                File.WriteAllText(outputFile, swaggerDoc.ToString());
+            }   
         }
 
         public static void SetSwaggerType(JObject jObject, IEdmType edmType)
@@ -775,7 +520,7 @@ namespace OData2Swagger
             else if (edmType.TypeKind == EdmTypeKind.Primitive)
             {
                 string format;
-                string type = GetPrimitiveTypeAndFormat((IEdmPrimitiveType) edmType, out format);
+                string type = GetPrimitiveTypeAndFormat((IEdmPrimitiveType)edmType, out format);
                 jObject.Add("type", type);
                 if (format != null)
                 {
@@ -832,4 +577,5 @@ namespace OData2Swagger
             }
         }
     }
+
 }
