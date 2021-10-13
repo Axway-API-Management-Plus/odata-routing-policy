@@ -27,7 +27,7 @@ jobs:
         msbuild.exe converter/odata/OdataSwaggerConverter.sln -property:Configuration=Release
     - name: Create Archive
       run: |
-        7z a  odataconverter.zip converter/odata/bin/Release/
+        7z a  odataconverter.zip converter/odata/bin/Release/ src/
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
