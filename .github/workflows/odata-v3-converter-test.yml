@@ -22,6 +22,12 @@ jobs:
     - name: Create Build Directory
       run: mkdir _build
 
+    - name: Current directory
+      run: pwd
+
+    - name: Create Build Directory
+      run: cd converter/odata
+
     - name: Restore Packages
       run: nuget restore OdataSwaggerConverter.sln
 
