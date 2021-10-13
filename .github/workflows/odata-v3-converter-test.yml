@@ -32,8 +32,8 @@ jobs:
       run: pwd
 
     - name: Restore Packages
-      run: nuget restore OdataSwaggerConverter.sln
+      run: nuget restore converter/odata/OdataSwaggerConverter.sln
 
     - name: Build Solution
       run: |
-        msbuild.exe OdataSwaggerConverter.sln -property:Configuration=Release
+        msbuild.exe converter/odata/OdataSwaggerConverter.sln -property:Configuration=Release
