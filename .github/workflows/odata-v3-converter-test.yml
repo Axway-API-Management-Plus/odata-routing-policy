@@ -27,7 +27,7 @@ jobs:
         msbuild.exe converter/odata/OdataSwaggerConverter.sln -property:Configuration=Release
     - name: Create Archive
       run: |
-        powershell Compress-7Zip "converter/odata/Release" -ArchiveFileName "odataconverter.zip" -Format Zip
+        Compress-Archive -Path converter/odata/Release/* -DestinationPath odataconverter
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
