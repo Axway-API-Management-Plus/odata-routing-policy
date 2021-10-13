@@ -26,7 +26,7 @@ jobs:
       run: pwd
 
     - name: Create Build Directory
-      run: cd converter/odata
+      run: cd converter\odata
     
     - name: Current directory
       run: pwd
