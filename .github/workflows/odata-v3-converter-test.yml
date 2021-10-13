@@ -11,18 +11,23 @@ jobs:
     if: "!contains(github.event.head_commit.message, 'skip ci')"
     env:
       workingDirectory: 'converter/odata'
-    runs-on: windows-2019
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET
-      shell: cmd
-      run: call Build.cmd
-    - name: List SDKs
-      run: dotnet --list-sdks
-    - name: Restore dependencies
-      working-directory: ${{env.workingDirectory}}
-      run: dotnet restore
-    - name: Test
-      working-directory: ${{env.workingDirectory}}
-      run: dotnet test --no-build --verbosity normal
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+
+    - name: Create Build Directory
+      run: mkdir _build
+
+    - name: Restore Packages
+      run: nuget restore OdataSwaggerConverter.sln
+
+    - name: Build Solution
+      run: |
+        msbuild.exe OdataSwaggerConverter.sln -property:Configuration=Release
