@@ -3,244 +3,31 @@ using Microsoft.Data.Edm.Csdl;
 using System;
 using Newtonsoft.Json.Linq;
 using System.IO;
-using System.Xml;
-using System.Net;
 using log4net;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
+
 
 namespace OdataSwaggerConverter
 {
-    public static class ExtensionMethods
-    {
-        public static JObject Responses(this JObject jObject, JObject responses)
-        {
-            jObject.Add("responses", responses);
-            return jObject;
-        }
-
-        public static JObject ResponseRef(this JObject responses, string name, string description, string refType)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-                {
-                    "schema", new JObject()
-                    {
-                        // {"$ref", refType}
-                        {"type", "string" }
-                    }
-                }
-            });
-
-            return responses;
-        }
-
-        public static JObject Response(this JObject responses, string name, string description, IEdmType type)
-        {
-            var schema = new JObject();
-            Program.SetSwaggerType(schema, type);
-
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-              //   {"type", "string" }
-                /*,
-                {"schema", schema}*/
-            });
-
-            return responses;
-        }
-
-        public static JObject ResponseArrayRef(this JObject responses, string name, string description, string refType)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-                {
-                    "schema", new JObject()
-                    {
-                        {"type", "array"},
-                        {
-                            "items", new JObject()
-                            {
-                                {"$ref", refType}
-                            }
-                        }
-                    }
-                }
-            });
-
-            return responses;
-        }
-
-        public static JObject DefaultErrorResponse(this JObject responses)
-        {
-            return responses.ResponseRef("default", "Unexpected error", "#/definitions/_Error");
-        }
-
-        public static JObject Response(this JObject responses, string name, string description)
-        {
-            responses.Add(name, new JObject()
-            {
-                {"description", description},
-            });
-
-            return responses;
-        }
-
-        public static JObject Parameters(this JObject jObject, JArray parameters)
-        {
-            jObject.Add("parameters", parameters);
-
-            return jObject;
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            string type)
-        {
-            return Parameter(parameters, name, kind, description, type, format: null, required: null);
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            string type, string format = null, bool? required = null)
-
-        {
-           parameters.Add(new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description},
-                {"type", type},
-            });
-
-            if (!string.IsNullOrEmpty(format))
-            {
-                (parameters.Last as JObject).Add("format", format);
-            }
-            if (required != null)
-            {
-                (parameters.Last as JObject).Add("required", required);
-            }
-
-            return parameters;
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            IEdmType type)
-        {
-            return Parameter(parameters, name, kind, description, type, required: null);
-        }
-
-        public static JArray Parameter(this JArray parameters, string name, string kind, string description,
-            IEdmType type, bool? required)
-        {
-            var parameter = new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description},
-            };
-
-            if (kind != "body")
-            {
-                Program.SetSwaggerType(parameter, type);
-            }
-            else
-            {
-                //Console.WriteLine("Body Type:" + type);
-                /*var schema = new JObject();
-                Program.SetSwaggerType(schema, type);*/
-                var schema = new JObject()
-                     {
-                {"type", "string"}
-                };
-                parameter.Add("schema", schema);
-
-            }
-
-            if (required != null)
-            {
-                parameter.Add("required", required);
-            }
-
-            parameters.Add(parameter);
-
-            return parameters;
-        }
-
-        public static JArray ParameterRef(this JArray parameters, string name, string kind, string description, string refType)
-        {
-            parameters.Add(new JObject()
-            {
-                {"name", name},
-                {"in", kind},
-                {"description", description}
-                ,
-                {
-                    "schema", new JObject()
-                    {
-                       // {"$ref", refType}
-                        {"type", "string" }
-                    }
-                }
-            });
-
-            return parameters;
-        }
-
-        public static JObject Tags(this JObject jObject, params string[] tags)
-        {
-            jObject.Add("tags", new JArray(tags));
-
-            return jObject;
-        }
-
-        public static JObject Summary(this JObject jObject, string summary)
-        {
-            jObject.Add("summary", summary);
-
-            return jObject;
-        }
-
-        public static JObject Description(this JObject jObject, string description)
-        {
-            jObject.Add("description", description);
-
-            return jObject;
-        }
-
-    }
+   
     class Program
     {
-
-        private static CredentialCache GetCredential(string url)
-        {
-            
-            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-            CredentialCache credentialCache = new CredentialCache();
-            credentialCache.Add(new System.Uri(url), "Basic", new NetworkCredential("tomcat", "tomcat"));
-            return credentialCache;
-        }
 
         private static readonly ILog log = LogManager.GetLogger(typeof(Program));
         static void Main(string[] args)
 
         {
-            //log4net.Config.BasicConfigurator.Configure();
+          //  log4net.Config.BasicConfigurator.Configure();
             log.Debug("Converting odatav3 document");
-
             string samlDisabled = "saml2=disabled";
             bool disableSAML = false;
-
             string username = null;
             string password = null;
 
             if (args.Length < 2)
             {
                 Console.WriteLine("Invalid command line arguments");
-                Console.WriteLine("Example : OdataSwaggerConverter.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata northwind.json");
+                Console.WriteLine("Example OData 4: OdataSwaggerConverter.exe http://services.odata.org/V4/TripPinServiceRW trip.json");
+                Console.WriteLine("Example OData 3: OdataSwaggerConverter.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata northwind.json");
                 return;
             }
 
@@ -262,83 +49,62 @@ namespace OdataSwaggerConverter
                     metadataURI = metadataURI + "?" + samlDisabled;
                 }
             }
-            var url = new Uri(metadataURI);
-            var host = url.Host;
-            int port = url.Port;
-
-            bool portAppend = false;
-
-            if (port == 80)
-            {
-                portAppend = false;
-            }
-            else if (port == 443)
-            {
-                portAppend = false;
-            }
-            else
-            {
-                portAppend = true;
-            }
-
-            if (portAppend)
-            {
-                host = host + ":" + port;
-            }
-            var version = "1.0.0";
-            var protocol = url.Scheme;
-
-            IEdmModel model = null;
+        
             try
             {
-                if (username != null && password != null)
+                var url = new Uri(metadataURI);
+                HttpResponseValue httpResponseValue = Util.Get(metadataURI, username, password);
+                int statusCode = httpResponseValue.getStatusCode();
+                string responseBody = httpResponseValue.getResponseBody();
+                string contentType = httpResponseValue.getContentType();
+
+                log.Debug("Response Http Status code : " + statusCode);
+                log.Debug("Response from metadata URI : " + responseBody);
+                log.Debug("Response Content-Type : " + contentType);
+
+                if (statusCode == 200)
                 {
-                    log.Debug("Fetch meta data with basic auth");
-                     /* XmlUrlResolver resolver = new XmlUrlResolver();
-                       NetworkCredential credential = new NetworkCredential(username, password);
-                       resolver.Credentials = credential;
-                  
-                       XmlReaderSettings settings = new XmlReaderSettings();
-                       settings.XmlResolver = resolver;*/
+                    if (contentType.Contains("application/json"))
+                    {
+                        log.Info("Processing odata 4 meta data");
+                        OData4.process(url, username, password, httpResponseValue.getResponseBody(), outputFile);
 
-                    WebClient client = new WebClient();
-                    string credentials = Convert.ToBase64String(
-                     Encoding.ASCII.GetBytes(username + ":" + password));
-                    client.Headers[HttpRequestHeader.Authorization] = string.Format(
-                        "Basic {0}", credentials);
-                    var result = client.DownloadData(url);
-                    log.Debug("Meta data " + System.Text.Encoding.Default.GetString(result));
-                    MemoryStream memoryStream = new MemoryStream(result);
-                    model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(memoryStream));
+                    }else if (contentType.Contains("application/xml"))
+                    {
+                        StringReader stringReader = new StringReader(responseBody);
+                        IEdmModel model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(stringReader));
+                        process(url, model, outputFile, disableSAML);
 
-                    // model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI, settings));
-                }
-                else
-                {
-
-                    model = EdmxReader.Parse(System.Xml.XmlTextReader.Create(metadataURI));
-                }
+                    }
+                }      
             }catch(Exception e)
             {
                 log.Error("Problem in reading meta data file", e);
                 return;
             }
+        }
 
-            
-            
-            
+        public static void process(Uri url, IEdmModel model, string outputFile, bool disableSAML)
+        {
+            var host = url.Host;
+            int port = url.Port;
+
+            if (!(port == 80 || port == 443))
+            {
+                host = host + ":" + port;
+            }
+
+            var version = "1.0.0";
+            var protocol = url.Scheme;
             var basePath = url.AbsolutePath;
             basePath = basePath.Substring(0, basePath.LastIndexOf("/"));
-
-
-
             JObject swaggerDoc = new JObject()
             {
                 {"swagger", "2.0"},
                 {"info", new JObject()
                 {
                     {"title", "OData Service"},
-                   {"description", "The OData Service at " + metadataURI},
+                    {"description", "The OData Service at " + url.ToString()},
                     {"version", version},
                     {"x-odata-version", model.GetMaxDataServiceVersion() + ""}
                 }},
@@ -351,19 +117,15 @@ namespace OdataSwaggerConverter
 
             JObject swaggerPaths = new JObject();
             swaggerDoc.Add("paths", swaggerPaths);
-
             JObject swaggeDefinitions = new JObject();
-            // Console.WriteLine(reader.BaseURI);
-         
             swaggerDoc.Add("definitions", swaggeDefinitions);
 
             foreach (var entitySet in model.EntityContainers())
             {
-
                 foreach (var entity in entitySet.EntitySets())
                 {
-
-                    if (!disableSAML) {
+                    if (!disableSAML)
+                    {
                         swaggerPaths.Add(GetPathForEntity(entity) + "*", CreateSwaggerPathForEntity(entity));
                     }
                     else
@@ -379,34 +141,19 @@ namespace OdataSwaggerConverter
                     {
                         swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForEntitySetSAML(entity));
                     }
-
                 }
-
             }
 
             foreach (var entitySet in model.EntityContainers())
             {
                 foreach (var entity in entitySet.FunctionImports())
                 {
-                    swaggerPaths.Add(GetPathForOperationImport(entity) + "*", CreateSwaggerPathForOperationImport(entity,disableSAML));
-                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForOperationImport(entity,disableSAML));
-
+                    swaggerPaths.Add(GetPathForOperationImport(entity) + "*", CreateSwaggerPathForOperationImport(entity, disableSAML));
+                    swaggerPaths.Add("/" + entity.Name + "*", CreateSwaggerPathForOperationImport(entity, disableSAML));
                     // Console.WriteLine(entity);
                 }
             }
-
-
-            /*foreach (var schemaElement in model.SchemaElements)
-
-
-            {
-             
-            }*/
-
-
-
-
-                swaggeDefinitions.Add("_Error", new JObject()
+            swaggeDefinitions.Add("_Error", new JObject()
             {
                 {
                     "properties", new JObject()
@@ -439,22 +186,15 @@ namespace OdataSwaggerConverter
             });
 
             File.WriteAllText(outputFile, swaggerDoc.ToString());
-
         }
 
 
         public static void SetSwaggerType(JObject jObject, IEdmType edmType)
         {
-
-           
             if (edmType.TypeKind == EdmTypeKind.Complex || edmType.TypeKind == EdmTypeKind.Entity)
             {
                 //jObject.Add("$ref", "#/definitions/" + edmType.ToString());
-               
                 jObject.Add("type", "string");
-
-
-
             }
             else if (edmType.TypeKind == EdmTypeKind.Primitive)
             {
@@ -600,13 +340,10 @@ namespace OdataSwaggerConverter
             };
         }
 
-
         static JObject CreateSwaggerPathForEntitySetSAML(IEdmEntitySet entitySet)
-
         {
             var keyParameters = new JArray();
             return new JObject()
-
             {
                 {
                     "get", new JObject()
@@ -689,7 +426,6 @@ namespace OdataSwaggerConverter
                 }
             };
         }
-
         static JObject CreateSwaggerPathForEntity(IEdmEntitySet entitySet)
         {
             var keyParameters = new JArray();
@@ -709,8 +445,6 @@ namespace OdataSwaggerConverter
                         .Description("Returns the entity with the key from " + entitySet.Name)
                         .Tags(entitySet.Name)
                         .Parameters((keyParameters.DeepClone() as JArray)
-
-
                             .Parameter("$expand", "query", "Expand navigation property", "string")
                             .Parameter("$select", "query", "select structural property", "string")
                             .Parameter("$orderby", "query", "order by some property", "string")
@@ -719,9 +453,6 @@ namespace OdataSwaggerConverter
                             .Parameter("$inlinecount", "query", "inlcude count in response", "string")
                             .Parameter("$format", "query", "response format", "string")
                             .Parameter("$links", "query", "response format", "string")
-                            
-
-
                         )
                         .Responses(new JObject()
                             .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
@@ -769,8 +500,6 @@ namespace OdataSwaggerConverter
                 }
             };
         }
-
-
         static JObject CreateSwaggerPathForEntitySAML(IEdmEntitySet entitySet)
         {
             var keyParameters = new JArray();
@@ -790,8 +519,6 @@ namespace OdataSwaggerConverter
                         .Description("Returns the entity with the key from " + entitySet.Name)
                         .Tags(entitySet.Name)
                         .Parameters((keyParameters.DeepClone() as JArray)
-
-
                             .Parameter("$expand", "query", "Expand navigation property", "string")
                             .Parameter("$select", "query", "select structural property", "string")
                             .Parameter("$orderby", "query", "order by some property", "string")
@@ -801,9 +528,6 @@ namespace OdataSwaggerConverter
                             .Parameter("$format", "query", "response format", "string")
                             .Parameter("$links", "query", "response format", "string")
                             .Parameter("saml2", "query", "Disable SAML SSO", "string")
-                          
-
-
                         )
                         .Responses(new JObject()
                             .Response("200", "EntitySet " + entitySet.Name, entitySet.ElementType)
@@ -855,8 +579,6 @@ namespace OdataSwaggerConverter
             };
         }
 
-
-
         static string GetPathForEntity(IEdmEntitySet entitySet)
         {
             string singleEntityPath = "/" + entitySet.Name + "(";
@@ -874,9 +596,7 @@ namespace OdataSwaggerConverter
             }
             singleEntityPath = singleEntityPath.Substring(0, singleEntityPath.Length - 2);
             singleEntityPath += ")";
-
             //Console.WriteLine("Path for entity :" + singleEntityPath);
-
             return singleEntityPath;
         }
 
@@ -917,25 +637,18 @@ namespace OdataSwaggerConverter
             swaggerOperationImport.Responses(swaggerResponses.DefaultErrorResponse());
 
             return new JObject()
-                {
-                    {operationImport is IEdmFunctionImport ? "get" : "post", swaggerOperationImport}
-                };
+            {
+                {operationImport is IEdmFunctionImport ? "get" : "post", swaggerOperationImport}
+            };
         }
 
-
-
         static string GetPathForOperationImport(IEdmFunctionImport operationImport)
-
-
         {
-
-               string swaggerOperationImportPath = "/" + operationImport.Name + "(";
-          
-                foreach (var parameter in operationImport.Parameters)
-                {
-                    swaggerOperationImportPath += parameter.Name + "=" + "{" + parameter.Name + "},";
-                }
-           
+            string swaggerOperationImportPath = "/" + operationImport.Name + "(";
+            foreach (var parameter in operationImport.Parameters)
+            {
+                swaggerOperationImportPath += parameter.Name + "=" + "{" + parameter.Name + "},";
+            }
             if (swaggerOperationImportPath.EndsWith(","))
             {
                 swaggerOperationImportPath = swaggerOperationImportPath.Substring(0,
@@ -943,12 +656,8 @@ namespace OdataSwaggerConverter
             }
             swaggerOperationImportPath += ")";
             //Console.WriteLine(swaggerOperationImportPath);
-
-            return swaggerOperationImportPath;
-
-            
+            return swaggerOperationImportPath;  
         }
-
 
         static JObject CreateSwaggerDefinitionForStructureType(IEdmStructuredType edmType)
         {
