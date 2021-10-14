@@ -25,6 +25,10 @@ jobs:
     - name: Build Solution
       run: |
         msbuild.exe converter/odata/OdataSwaggerConverter.sln -property:Configuration=Release
+    - name: echo
+      env:
+        working_dir: ${{github.workspace}}
+      run: echo "$working_dir"
     - name: Create Archive
       run: |
         7z a  odataconverter.zip converter/odata/bin/Release/ src/
