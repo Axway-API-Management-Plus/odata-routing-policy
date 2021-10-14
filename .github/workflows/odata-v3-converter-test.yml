@@ -29,7 +29,7 @@ jobs:
       env:
         working_dir: ${{github.workspace}}
       run: |
-        7z a  odataconverter.zip $working_dir\converter\odata\bin\Release\* src
+        7z a  odataconverter.zip %working_dir%\converter\odata\bin\Release\* src
     - name: Create Release
       id: create_release
       uses: actions/create-release@v1
