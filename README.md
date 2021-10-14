@@ -6,13 +6,13 @@ This project provides:
 The converter takes in an OData URL (such as http://services.odata.org/V4/TripPinServiceRW) and the name of the output file to convert the odata specfication to a Swagger 2.0 API-Specification, which can imported into the Axway API-Manager.
 ## OData V4 Usage:
 ```bash
-D:\odata-routing-policy\converter\odata4\bin\Release>OData2Swagger.exe http://services.odata.org/V4/TripPinServiceRW name_of_swagger_file.json [http-basic-username] [http-basic-password]
+D:\odata-routing-policy\converter\odata\bin\Release>OdataSwaggerConverter.exe http://services.odata.org/V4/TripPinServiceRW name_of_swagger_file.json [http-basic-username] [http-basic-password]
 
 ```
 
 ## OData V3 and Below Usage:
 ```bash
-D:\odata-routing-policy\converter\odata3\bin\Release>OdataSwaggerConverter.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata name_of_swagger_file.json [http-basic-username] [http-basic-password]
+D:\odata-routing-policy\converter\odata\bin\Release>OdataSwaggerConverter.exe http://services.odata.org/V3/Northwind/Northwind.svc/$metadata name_of_swagger_file.json [http-basic-username] [http-basic-password]
 
 ```
 
